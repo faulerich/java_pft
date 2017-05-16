@@ -10,9 +10,8 @@ public class MyFirstProgram {
 
     System.out.println("Расстояние между точками с координатами (" + p1.x + " ; " + p1.y + ") и (" + p2.x + " ; " + p2.y + ") равно " + distance(p1, p2));
 
-
     //проверка работоспособности метода, описанного в классе Point
-    System.out.println("Расстояние между точками с координатами (" + p1.x + " ; " + p1.y + ") и (" + p2.x + " ; " + p2.y + ") равно " + Point.distance(p1, p2));
+    System.out.println("Расстояние между точками с координатами (" + p1.x + " ; " + p1.y + ") и (" + p2.x + " ; " + p2.y + ") равно " + p1.distance(p2));
   }
 
   public static double distance(Point p1, Point p2) {
