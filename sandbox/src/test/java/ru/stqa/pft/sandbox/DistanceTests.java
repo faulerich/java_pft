@@ -12,7 +12,7 @@ public class DistanceTests {
   public void testDistance() {
     Point p1 = new Point(2, 4);
     Point p2 = new Point(6, 7);
-    Assert.assertEquals(p1.distance(p2), 5.0, "Ошибка!!!!");
+    Assert.assertEquals(p1.distance(p2), 5.0, "Ошибка!");
 
     Point p3 = new Point(0, 0);
     Point p4 = new Point(0, -1);
