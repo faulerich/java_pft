@@ -45,6 +45,7 @@ public class ContactCreationTests {
     wd.findElement(By.name("email")).click();
     wd.findElement(By.name("email")).clear();
     wd.findElement(By.name("email")).sendKeys(contactData.getEmail());
+    //день и месяц рождения не выбираем, только год
     /*
     if (!wd.findElement(By.xpath("//div[@id='content']/form/select[1]//option[10]")).isSelected()) {
       wd.findElement(By.xpath("//div[@id='content']/form/select[1]//option[10]")).click();

@@ -66,16 +66,16 @@
       <file leaf-file-name="ContactCreationTests.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/../addressbook-web-tests/src/test/java/ru/stqa/pft/addressbook/ContactCreationTests.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="31" column="76" lean-forward="true" selection-start-line="31" selection-start-column="76" selection-end-line="31" selection-end-column="76" />
+            <state relative-caret-position="340">
+              <caret line="50" column="59" lean-forward="true" selection-start-line="50" selection-start-column="59" selection-end-line="50" selection-end-column="59" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#967#968#0" expanded="true" />
                 <element signature="e#1048#1049#0" expanded="true" />
-                <element signature="e#2415#2416#0" expanded="true" />
-                <element signature="e#2471#2472#0" expanded="true" />
-                <element signature="e#2942#2943#0" expanded="true" />
-                <element signature="e#2961#2962#0" expanded="true" />
+                <element signature="e#2467#2468#0" expanded="true" />
+                <element signature="e#2523#2524#0" expanded="true" />
+                <element signature="e#2994#2995#0" expanded="true" />
+                <element signature="e#3013#3014#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1204,11 +1204,11 @@
     <history-entry file="ContactCreationTests - 2017.05.19 at 18h 28m 30s.xml">
       <configuration name="ContactCreationTests" configurationId="TestNG" />
     </history-entry>
-    <history-entry file="DistanceTests - 2017.05.18 at 11h 27m 01s.xml">
-      <configuration name="DistanceTests" configurationId="TestNG" />
+    <history-entry file="ContactCreationTests - 2017.05.19 at 18h 33m 14s.xml">
+      <configuration name="ContactCreationTests" configurationId="TestNG" />
     </history-entry>
-    <history-entry file="GroupCreationTests - 2017.05.19 at 00h 57m 47s.xml">
-      <configuration name="GroupCreationTests" configurationId="TestNG" />
+    <history-entry file="ContactCreationTests - 2017.05.19 at 18h 34m 53s.xml">
+      <configuration name="ContactCreationTests" configurationId="TestNG" />
     </history-entry>
     <history-entry file="GroupCreationTests - 2017.05.19 at 01h 02m 39s.xml">
       <configuration name="GroupCreationTests" configurationId="TestNG" />
@@ -1332,16 +1332,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../addressbook-web-tests/src/test/java/ru/stqa/pft/addressbook/ContactCreationTests.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="31" column="76" lean-forward="true" selection-start-line="31" selection-start-column="76" selection-end-line="31" selection-end-column="76" />
+        <state relative-caret-position="340">
+          <caret line="50" column="59" lean-forward="true" selection-start-line="50" selection-start-column="59" selection-end-line="50" selection-end-column="59" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#967#968#0" expanded="true" />
             <element signature="e#1048#1049#0" expanded="true" />
-            <element signature="e#2415#2416#0" expanded="true" />
-            <element signature="e#2471#2472#0" expanded="true" />
-            <element signature="e#2942#2943#0" expanded="true" />
-            <element signature="e#2961#2962#0" expanded="true" />
+            <element signature="e#2467#2468#0" expanded="true" />
+            <element signature="e#2523#2524#0" expanded="true" />
+            <element signature="e#2994#2995#0" expanded="true" />
+            <element signature="e#3013#3014#0" expanded="true" />
           </folding>
         </state>
       </provider>
