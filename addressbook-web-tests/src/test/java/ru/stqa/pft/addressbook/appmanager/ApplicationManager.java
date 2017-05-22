@@ -34,9 +34,7 @@ public class ApplicationManager {
     wd.quit();
   }
 
-  public void selectElement() {
-    wd.findElement(By.name("selected[]")).click();
-  }
+
 
   public GroupHelper getGroupHelper() {
     return groupHelper;
