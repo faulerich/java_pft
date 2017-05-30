@@ -7,10 +7,8 @@ public class ContactCreationTests extends TestBase {
 
   @Test
   public void contactGroupCreation() {
+    app.getContactHelper().createContact(new ContactData("Yevgeny", "Bondarenko", "123", "test@test.com", "1985", "test1"), true);
 
-    app.getContactHelper().initContactCreation();
-    app.getContactHelper().fillContactCreationForm(new ContactData("Yevgeny", "Bondarenko", "123", "test@test.com", "1985", "test1"), true);
-    app.getContactHelper().submitContactCreation();
   }
 
 }
