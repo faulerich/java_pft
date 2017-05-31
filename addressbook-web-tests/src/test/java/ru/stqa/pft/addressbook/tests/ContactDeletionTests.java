@@ -10,7 +10,7 @@ public class ContactDeletionTests extends TestBase {
     app.getNavigationHelper().goToContactList();
 
     if (!app.getGroupHelper().isThereAGroup()) {
-      app.getContactHelper().createContact(new ContactData("Yevgeny", "Bondarenko", "123", "test@test.com", "1985", "test1"), true);
+      app.getContactHelper().createContact(new ContactData("Yevgeny", "Bondarenko", "123", "test@test.com", "1985", "[none]"), true);
     }
     app.getNavigationHelper().goToContactList();
     app.getGroupHelper().selectElement();
