@@ -4,6 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.GroupData;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class GroupCreationTests extends TestBase {
     List<GroupData> before = app.getGroupHelper().getGroupList(); //получаем список элементов до операции добавления
 
     System.out.println(before.size());
-    GroupData group = new GroupData("test1", "test2", "test3");
+    GroupData group = new GroupData("test3", "test2", "test3");
     app.getGroupHelper().createGroup(group);
     List<GroupData> after = app.getGroupHelper().getGroupList(); //получаем список элементов после операции добавления
 
@@ -28,13 +29,14 @@ public class GroupCreationTests extends TestBase {
     * для его нахождения тип идентификтора надо поменять со String на Int*/
 
 
-    int max = 0;
-    for (GroupData g : after) {
-      if (g.getId() > max) {
-        max = g.getId();
-      }
-    }
-    group.setId(max);
+
+    //создаем новый объект типа "компаратор"
+   // Comparator<? super GroupData> byId = (Comparator<GroupData>) (o1, o2) -> Integer.compare(o1.getId(), o2.getId());
+
+
+    //превращаем список в поток и вычислим максимальный элемент в потоке (max),
+    // передав ему анонимную функцию (лямбда-выражение)
+    group.setId(after.stream().max((o1, o2) -> Integer.compare(o1.getId(), o2.getId())).get().getId());
     before.add(group);
     Assert.assertEquals(new HashSet<Object>(before), new HashSet<Object>(after)); //сравниваем не списки, а множества (т.к. они упорядочены)
 
