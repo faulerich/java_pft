@@ -38,7 +38,10 @@ public class GroupCreationTests extends TestBase {
     // передав ему анонимную функцию (лямбда-выражение)
     group.setId(after.stream().max((o1, o2) -> Integer.compare(o1.getId(), o2.getId())).get().getId());
     before.add(group);
-    Assert.assertEquals(new HashSet<Object>(before), new HashSet<Object>(after)); //сравниваем не списки, а множества (т.к. они упорядочены)
+    Comparator<? super GroupData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
+    before.sort(byId); //сортируем "старый" список
+    after.sort(byId); //сортируем "новый" список
+    Assert.assertEquals(before, after); //сравниваем не списки, а множества (т.к. они упорядочены)
 
 
   }

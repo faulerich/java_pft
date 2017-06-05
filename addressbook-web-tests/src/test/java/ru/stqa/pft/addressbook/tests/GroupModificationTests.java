@@ -4,6 +4,7 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.GroupData;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 
@@ -30,7 +31,12 @@ public class GroupModificationTests extends TestBase {
 
     before.remove(before.size() - 1); //удаляем последний элемент из списка
     before.add(group); //вместо него добавляем тот, который должен появиться после модификации
-    Assert.assertEquals(new HashSet<Object>(before), new HashSet<Object>(after)); //сравниваем не списки, а множества (т.к. они упорядочены)
+
+    Comparator<? super GroupData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
+    before.sort(byId);
+    after.sort(byId);
+
+    Assert.assertEquals(before, after); //сравниваем списки, т.к. они упорядочены по нашим правилам, написанным в компараторе
 
     /*обратить внимание, что, если в результате модификации получится так, что несколько групп будут иметь одинаковые имена,
     * то тест выполнится некорректно: множества не допускают неуникальных элементов => все элементы с одинаковыми названия будут схлопываться
