@@ -1,13 +1,37 @@
 package ru.stqa.pft.addressbook.tests;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
+
+import java.util.Comparator;
+import java.util.List;
 
 public class ContactCreationTests extends TestBase {
 
   @Test
   public void contactGroupCreation() {
-    app.getContactHelper().createContact(new ContactData("Yevgeny", "Bondarenko", "123", "test@test.com", "1985", "test1"), true);
+
+    app.getNavigationHelper().goToContactList();
+    List<ContactData> before = app.getContactHelper().getContactList(); //получаем список элементов до операции добавления
+
+    System.out.println(before.size());
+    ContactData contact = new ContactData("Yevgeny", "Bondarenko", "123", "test@test.com", "1985", "test1");
+    app.getContactHelper().createContact(contact, true);
+    app.getNavigationHelper().goToContactList();
+    List<ContactData> after = app.getContactHelper().getContactList(); //получаем список элементов после операции добавления
+    System.out.println(after.size());
+    Assert.assertEquals(after.size(), before.size() + 1); //сравниваем размеры списков, которые получены методом getContactList
+
+
+    //превращаем список в поток и вычислим максимальный элемент в потоке (max),
+    // передав ему анонимную функцию (лямбда-выражение)
+    //contact.setId(after.stream().max((o1, o2) -> Integer.compare(o1.getId(), o2.getId())).get().getId());
+    before.add(contact);
+    Comparator<? super ContactData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
+    before.sort(byId); //сортируем "старый" список
+    after.sort(byId); //сортируем "новый" список
+    Assert.assertEquals(before, after); //сравниваем списки
 
   }
 
