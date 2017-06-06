@@ -41,7 +41,7 @@ public class GroupCreationTests extends TestBase {
     Comparator<? super GroupData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
     before.sort(byId); //сортируем "старый" список
     after.sort(byId); //сортируем "новый" список
-    Assert.assertEquals(before, after); //сравниваем не списки, а множества (т.к. они упорядочены)
+    Assert.assertEquals(before, after); //сравниваем списки
 
 
   }
