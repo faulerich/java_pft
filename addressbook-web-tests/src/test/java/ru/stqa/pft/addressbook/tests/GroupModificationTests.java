@@ -19,14 +19,14 @@ public class GroupModificationTests extends TestBase {
     if (!app.getGroupHelper().isThereAGroup()) {
       app.getGroupHelper().createGroup(new GroupData("test1", "test2", "test3"));
     }
-    List<GroupData> before = app.getGroupHelper().getGroupList(); //получаем список элементов до операции добавления
+    List<GroupData> before = app.getGroupHelper().getGroupList(); //получаем список элементов до модификации
     app.getGroupHelper().selectElement(before.size() - 1); //выбираем последнюю группу
     app.getGroupHelper().initGroupModification();
     GroupData group = new GroupData(before.get(before.size() - 1).getId(), "test2", "test2", "test3"); //сохраняем старый идентификатор
     app.getGroupHelper().fillGroupForm(group);
     app.getGroupHelper().submitGroupModification();
     app.getGroupHelper().returnToGroupPage();
-    List<GroupData> after = app.getGroupHelper().getGroupList(); //получаем список элементов после операции добавления
+    List<GroupData> after = app.getGroupHelper().getGroupList(); //получаем список элементов после модификации
     Assert.assertEquals(after.size(), before.size());
 
     before.remove(before.size() - 1); //удаляем последний элемент из списка
