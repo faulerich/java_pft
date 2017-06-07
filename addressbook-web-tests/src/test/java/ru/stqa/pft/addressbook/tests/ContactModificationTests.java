@@ -21,8 +21,7 @@ public class ContactModificationTests extends TestBase {
     }
     app.getNavigationHelper().goToContactList();
     List<ContactData> before = app.getContactHelper().getContactList(); //получаем список элементов до модификации
-    app.getGroupHelper().selectElement(before.size() - 1); //выбираем последний контакт
-    app.getContactHelper().initContactModification();
+    app.getContactHelper().initContactModification(before.size() + 1);
     ContactData contact = new ContactData(before.get(before.size() - 1).getId(), "Yevgeny1", "Bondarenko2", "123", "test@test.com", "1985", "[none]"); //сохраняем старый идентификатор
     app.getContactHelper().fillContactCreationForm(contact, false);
     app.getContactHelper().submitContactModification();
