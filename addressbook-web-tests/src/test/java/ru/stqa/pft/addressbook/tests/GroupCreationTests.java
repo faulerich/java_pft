@@ -15,7 +15,7 @@ public class GroupCreationTests extends TestBase {
     List<GroupData> before = app.group().list(); //получаем список элементов до операции добавления
 
     System.out.println(before.size());
-    GroupData group = new GroupData("test3", "test2", "test3");
+    GroupData group = new GroupData().withName("test3");
     app.group().create(group);
     List<GroupData> after = app.group().list(); //получаем список элементов после операции добавления
 
@@ -35,7 +35,6 @@ public class GroupCreationTests extends TestBase {
 
     //превращаем список в поток и вычислим максимальный элемент в потоке (max),
     // передав ему анонимную функцию (лямбда-выражение)
-    group.setId(after.stream().max((o1, o2) -> Integer.compare(o1.getId(), o2.getId())).get().getId());
     before.add(group);
     Comparator<? super GroupData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
     before.sort(byId); //сортируем "старый" список

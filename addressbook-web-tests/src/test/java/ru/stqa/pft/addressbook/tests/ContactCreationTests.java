@@ -16,7 +16,8 @@ public class ContactCreationTests extends TestBase {
     List<ContactData> before = app.contact().list(); //получаем список элементов до операции добавления
 
     System.out.println(before.size());
-    ContactData contact = new ContactData("Yevgeny", "Bondarenko", "123", "test@test.com", "1985", "test1");
+    ContactData contact = new ContactData()
+            .withFirstName("Yevgeny").withLastName( "Bondarenko").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("test1");
     app.contact().create(contact, true);
     app.goTo().contactList();
     List<ContactData> after = app.contact().list(); //получаем список элементов после операции добавления

@@ -17,7 +17,8 @@ public class ContactModificationTests extends TestBase {
   public void ensurePreconditions() {  //проверяем предусловия: если список контактов пуст, то создаем контакт
     app.goTo().contactList();
     if (app.contact().list().size() == 0) {
-      app.contact().create(new ContactData("Yevgeny", "Bondarenko", "123", "test@test.com", "1985", "[none]"), true);
+      app.contact().create(new ContactData()
+              .withFirstName("Yevgeny").withLastName("Bondarenko").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("test1"), true);
     }
   }
 
@@ -28,7 +29,8 @@ public class ContactModificationTests extends TestBase {
     List<ContactData> before = app.contact().list(); //получаем список элементов до модификации
     int index = before.size() - 1;
     app.contact().initContactModification(index+2);
-    ContactData contact = new ContactData(before.get(index).getId(), "Yevgeny1", "Bondarenko2", "123", "test@test.com", "1985", "[none]"); //сохраняем старый идентификатор
+    ContactData contact = new ContactData()
+            .withID(before.get(index).getId()).withFirstName("Yevgeny2").withLastName("Bondarenko2").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]"); //сохраняем старый идентификатор
     app.contact().modify(contact);
 
     List<ContactData> after = app.contact().list(); //получаем список элементов после модификации

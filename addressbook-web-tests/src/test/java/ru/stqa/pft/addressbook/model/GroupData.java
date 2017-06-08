@@ -1,38 +1,37 @@
 package ru.stqa.pft.addressbook.model;
 
 public class GroupData {
-  private final String name;
-  private int id;  //модификатор final убрали, т.к. с ним мы не сгенерируем setter
-  private final String header;
-  private final String footer;
+  private String name;
+  private int id = Integer.MAX_VALUE;;  //модификатор final убрали, т.к. с ним мы не сгенерируем setter
+  private String header;
+
+
+
+  private String footer;
 
 
   public int getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public GroupData withID(int id) {
     this.id = id;
+    return this;
   }
 
-
-
-  //если не получаем id в качестве параметра, то вызывается этот GroupData
-  public GroupData(String name, String header, String footer) {
-    this.id = Integer.MAX_VALUE; //чтобы группа при сортировке оказалась на первом месте
-
+  public GroupData withName(String name) {
     this.name = name;
-    this.header = header;
-
-    this.footer = footer;
+    return this;
   }
 
-  //если получаем id в качестве параметра, то вызывается этот GroupData
-  public GroupData(int id, String name, String header, String footer) {
-    this.id = id;
-    this.name = name;
+  public GroupData withHeader(String header) {
     this.header = header;
+    return this;
+  }
+
+  public GroupData withFooter(String footer) {
     this.footer = footer;
+    return this;
   }
 
   public String getName() {
