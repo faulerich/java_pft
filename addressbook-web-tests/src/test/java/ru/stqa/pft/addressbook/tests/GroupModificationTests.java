@@ -15,20 +15,20 @@ public class GroupModificationTests extends TestBase {
 
   @BeforeMethod   //перед каждым тестовым методом должна выполняться проверка предусловия
   public void ensurePreconditions() {  //проверяем предусловия: если список групп пуст, то создаем группу
-    app.getNavigationHelper().goToGroupPage();
-    if (!app.getGroupHelper().isThereAGroup()) {
-      app.getGroupHelper().createGroup(new GroupData("test1", "test2", "test3"));
+    app.goTo().groupPage();
+    if (app.group().list().size() == 0) {
+      app.group().create(new GroupData("test1", "test2", "test3"));
     }
   }
 
   @Test
   public void testGroupModification() {
 
-    List<GroupData> before = app.getGroupHelper().getGroupList(); //получаем список элементов до модификации
+    List<GroupData> before = app.group().list(); //получаем список элементов до модификации
     int index = before.size() - 1;
     GroupData group = new GroupData(before.get(index).getId(), "test2", "test2", "test3"); //сохраняем старый идентификатор
-    app.getGroupHelper().modifyGroup(index, group);
-    List<GroupData> after = app.getGroupHelper().getGroupList(); //получаем список элементов после модификации
+    app.group().modify(index, group);
+    List<GroupData> after = app.group().list(); //получаем список элементов после модификации
     Assert.assertEquals(after.size(), before.size());
 
     before.remove(index); //удаляем последний элемент из списка

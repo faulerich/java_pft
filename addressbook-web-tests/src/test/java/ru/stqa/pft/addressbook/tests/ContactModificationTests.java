@@ -4,7 +4,6 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
-import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.Comparator;
 import java.util.List;
@@ -16,23 +15,23 @@ public class ContactModificationTests extends TestBase {
 
   @BeforeMethod   //перед каждым тестовым методом должна выполняться проверка предусловия
   public void ensurePreconditions() {  //проверяем предусловия: если список контактов пуст, то создаем контакт
-    app.getNavigationHelper().goToContactList();
-    if (!app.getContactHelper().isThereAContact()) {
-      app.getContactHelper().createContact(new ContactData("Yevgeny", "Bondarenko", "123", "test@test.com", "1985", "[none]"), true);
+    app.goTo().contactList();
+    if (app.contact().list().size() == 0) {
+      app.contact().create(new ContactData("Yevgeny", "Bondarenko", "123", "test@test.com", "1985", "[none]"), true);
     }
   }
 
   @Test
   public void testContactModification() {
 
-    app.getNavigationHelper().goToContactList();
-    List<ContactData> before = app.getContactHelper().getContactList(); //получаем список элементов до модификации
+    app.goTo().contactList();
+    List<ContactData> before = app.contact().list(); //получаем список элементов до модификации
     int index = before.size() - 1;
-    app.getContactHelper().initContactModification(index+2);
+    app.contact().initContactModification(index+2);
     ContactData contact = new ContactData(before.get(index).getId(), "Yevgeny1", "Bondarenko2", "123", "test@test.com", "1985", "[none]"); //сохраняем старый идентификатор
-    app.getContactHelper().modifyContact(contact);
+    app.contact().modify(contact);
 
-    List<ContactData> after = app.getContactHelper().getContactList(); //получаем список элементов после модификации
+    List<ContactData> after = app.contact().list(); //получаем список элементов после модификации
     Assert.assertEquals(after.size(), before.size());
 
     before.remove(index); //удаляем последний элемент из списка

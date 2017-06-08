@@ -5,22 +5,21 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 
 public class GroupCreationTests extends TestBase {
 
   @Test
   public void testGroupCreation() {
-    app.getNavigationHelper().goToGroupPage();
-    List<GroupData> before = app.getGroupHelper().getGroupList(); //получаем список элементов до операции добавления
+    app.goTo().groupPage();
+    List<GroupData> before = app.group().list(); //получаем список элементов до операции добавления
 
     System.out.println(before.size());
     GroupData group = new GroupData("test3", "test2", "test3");
-    app.getGroupHelper().createGroup(group);
-    List<GroupData> after = app.getGroupHelper().getGroupList(); //получаем список элементов после операции добавления
+    app.group().create(group);
+    List<GroupData> after = app.group().list(); //получаем список элементов после операции добавления
 
-    Assert.assertEquals(after.size(), before.size() + 1); //сравниваем размеры списков, которые получены методом getGroupList
+    Assert.assertEquals(after.size(), before.size() + 1); //сравниваем размеры списков, которые получены методом list
     System.out.println(after.size());
 
 

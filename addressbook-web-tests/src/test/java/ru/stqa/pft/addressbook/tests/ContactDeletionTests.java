@@ -11,31 +11,31 @@ public class ContactDeletionTests extends TestBase {
 
   @BeforeMethod   //перед каждым тестовым методом должна выполняться проверка предусловия
   public void ensurePreconditions() {  //проверяем предусловия: если список контактов пуст, то создаем контакт
-    app.getNavigationHelper().goToContactList();
-    if (!app.getContactHelper().isThereAContact()) {
-      app.getContactHelper().createContact(new ContactData("Yevgeny", "Bondarenko", "123", "test@test.com", "1985", "[none]"), true);
+    app.goTo().contactList();
+    if (app.group().list().size() == 0) {
+      app.contact().create(new ContactData("Yevgeny", "Bondarenko", "123", "test@test.com", "1985", "[none]"), true);
     }
   }
 
   @Test
   public void testContactDeletion() {
 
-    app.getNavigationHelper().goToContactList();
-    List<ContactData> before = app.getContactHelper().getContactList(); //получаем список элементов до операции добавления
+    app.goTo().contactList();
+    List<ContactData> before = app.contact().list(); //получаем список элементов до операции добавления
+    int index = before.size() - 1;
     System.out.println(before.size());
-    app.getNavigationHelper().goToContactList();
-    app.getGroupHelper().selectElement(before.size() - 1);
-    app.getContactHelper().deleteSelectedContacts();
-    app.getNavigationHelper().goToContactList();
+    app.goTo().contactList();
+    app.contact().delete(index);
 
-    List<ContactData> after = app.getContactHelper().getContactList();
+    List<ContactData> after = app.contact().list();
     System.out.println(after.size());//получаем список элементов после операции добавления
     Assert.assertEquals(after.size(), before.size() - 1);
 
     //чтобы убедиться в том, что контакт успешно удалился, мы сравниваем списки целиком: до удаления и после удаления
-    before.remove(before.size() - 1); //последний элемент
+    before.remove(index); //последний элемент
     Assert.assertEquals(before, after);
 
   }
+
 
 }

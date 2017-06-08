@@ -12,16 +12,16 @@ public class ContactCreationTests extends TestBase {
   @Test
   public void contactGroupCreation() {
 
-    app.getNavigationHelper().goToContactList();
-    List<ContactData> before = app.getContactHelper().getContactList(); //получаем список элементов до операции добавления
+    app.goTo().contactList();
+    List<ContactData> before = app.contact().list(); //получаем список элементов до операции добавления
 
     System.out.println(before.size());
     ContactData contact = new ContactData("Yevgeny", "Bondarenko", "123", "test@test.com", "1985", "test1");
-    app.getContactHelper().createContact(contact, true);
-    app.getNavigationHelper().goToContactList();
-    List<ContactData> after = app.getContactHelper().getContactList(); //получаем список элементов после операции добавления
+    app.contact().create(contact, true);
+    app.goTo().contactList();
+    List<ContactData> after = app.contact().list(); //получаем список элементов после операции добавления
     System.out.println(after.size());
-    Assert.assertEquals(after.size(), before.size() + 1); //сравниваем размеры списков, которые получены методом getContactList
+    Assert.assertEquals(after.size(), before.size() + 1); //сравниваем размеры списков, которые получены методом list
 
 
     //превращаем список в поток и вычислим максимальный элемент в потоке (max),

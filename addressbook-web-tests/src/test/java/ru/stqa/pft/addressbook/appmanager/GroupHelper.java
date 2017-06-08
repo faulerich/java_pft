@@ -52,7 +52,7 @@ public class GroupHelper extends HelperBase {
     click(By.name("update"));
   }
 
-  public void createGroup(GroupData group) {
+  public void create(GroupData group) {
     initGroupCreation();
     fillGroupForm(group);
     submitGroupCreation();
@@ -67,7 +67,7 @@ public class GroupHelper extends HelperBase {
     return wd.findElements(By.name("selected[]")).size();     //получаем размер списка элементов
   }
 
-  public void modifyGroup(int index, GroupData group) {
+  public void modify(int index, GroupData group) {
     selectElement(index); //выбираем последнюю группу
     initGroupModification();
     fillGroupForm(group);
@@ -75,8 +75,14 @@ public class GroupHelper extends HelperBase {
     returnToGroupPage();
   }
 
+  public void delete(int index) {
+    selectElement(index);
+    deleteSelectedGroups();
+    returnToGroupPage();
+  }
+
   //метод для получения списка групп
-  public List<GroupData> getGroupList() {
+  public List<GroupData> list() {
     List<GroupData> groups = new ArrayList<GroupData>();
     List<WebElement> elements = wd.findElements(By.cssSelector("span.group")); //выбираем список всех элементов с css-селектором span.group
     for (WebElement element : elements) { //переменная element пробегает по списку elements
