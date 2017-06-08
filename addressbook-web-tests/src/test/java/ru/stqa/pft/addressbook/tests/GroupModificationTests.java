@@ -1,11 +1,11 @@
 package ru.stqa.pft.addressbook.tests;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -13,23 +13,25 @@ import java.util.List;
  */
 public class GroupModificationTests extends TestBase {
 
-  @Test
-  public void testGroupModification() {
+  @BeforeMethod   //перед каждым тестовым методом должна выполняться проверка предусловия
+  public void ensurePreconditions() {  //проверяем предусловия: если список групп пуст, то создаем группу
     app.getNavigationHelper().goToGroupPage();
     if (!app.getGroupHelper().isThereAGroup()) {
       app.getGroupHelper().createGroup(new GroupData("test1", "test2", "test3"));
     }
+  }
+
+  @Test
+  public void testGroupModification() {
+
     List<GroupData> before = app.getGroupHelper().getGroupList(); //получаем список элементов до модификации
-    app.getGroupHelper().selectElement(before.size() - 1); //выбираем последнюю группу
-    app.getGroupHelper().initGroupModification();
-    GroupData group = new GroupData(before.get(before.size() - 1).getId(), "test2", "test2", "test3"); //сохраняем старый идентификатор
-    app.getGroupHelper().fillGroupForm(group);
-    app.getGroupHelper().submitGroupModification();
-    app.getGroupHelper().returnToGroupPage();
+    int index = before.size() - 1;
+    GroupData group = new GroupData(before.get(index).getId(), "test2", "test2", "test3"); //сохраняем старый идентификатор
+    app.getGroupHelper().modifyGroup(index, group);
     List<GroupData> after = app.getGroupHelper().getGroupList(); //получаем список элементов после модификации
     Assert.assertEquals(after.size(), before.size());
 
-    before.remove(before.size() - 1); //удаляем последний элемент из списка
+    before.remove(index); //удаляем последний элемент из списка
     before.add(group); //вместо него добавляем тот, который должен появиться после модификации
 
     Comparator<? super GroupData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());

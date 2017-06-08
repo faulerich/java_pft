@@ -22,6 +22,14 @@ public class ContactHelper extends HelperBase {
     super(wd);
   }
 
+  public void goToContactList() {
+
+    if (isElementPresent(By.id("maintable"))) {
+      return;
+    }
+    click(By.linkText("home"));
+  }
+
   public void submitContactCreation() {
     click(By.xpath("//div[@id='content']/form/input[21]"));
   }
@@ -69,6 +77,12 @@ public class ContactHelper extends HelperBase {
 
   public boolean isThereAContact() {
     return isElementPresent(By.name("selected[]"));
+  }
+
+  public void modifyContact(ContactData contact) {
+    fillContactCreationForm(contact, false);
+    submitContactModification();
+    goToContactList();
   }
 
   //метод для получения списка контактов

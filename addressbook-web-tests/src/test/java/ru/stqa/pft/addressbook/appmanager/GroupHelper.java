@@ -67,6 +67,14 @@ public class GroupHelper extends HelperBase {
     return wd.findElements(By.name("selected[]")).size();     //получаем размер списка элементов
   }
 
+  public void modifyGroup(int index, GroupData group) {
+    selectElement(index); //выбираем последнюю группу
+    initGroupModification();
+    fillGroupForm(group);
+    submitGroupModification();
+    returnToGroupPage();
+  }
+
   //метод для получения списка групп
   public List<GroupData> getGroupList() {
     List<GroupData> groups = new ArrayList<GroupData>();

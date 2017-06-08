@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ContactCreationTests extends TestBase {
 
-  @Test(enabled = false)
+  @Test
   public void contactGroupCreation() {
 
     app.getNavigationHelper().goToContactList();
