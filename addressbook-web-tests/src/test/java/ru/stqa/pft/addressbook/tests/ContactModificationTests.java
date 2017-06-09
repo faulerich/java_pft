@@ -4,9 +4,11 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Bond on 23.05.2017.
@@ -18,7 +20,7 @@ public class ContactModificationTests extends TestBase {
     app.goTo().contactList();
     if (app.contact().list().size() == 0) {
       app.contact().create(new ContactData()
-              .withFirstName("Yevgeny").withLastName("Bondarenko").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("test1"), true);
+              .withFirstName("Yevgeny").withLastName("Bondarenko").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]"), true);
     }
   }
 
@@ -26,24 +28,21 @@ public class ContactModificationTests extends TestBase {
   public void testContactModification() {
 
     app.goTo().contactList();
-    List<ContactData> before = app.contact().list(); //получаем список элементов до модификации
-    int index = before.size() - 1;
-    app.contact().initContactModification(index+2);
+    Set<ContactData> before = app.contact().all(); //получаем множество элементов до модификации
+    ContactData modifiedContact = before.iterator().next();
+    System.out.println(modifiedContact.getId());
+    app.contact().initContactModification(modifiedContact.getId());
     ContactData contact = new ContactData()
-            .withID(before.get(index).getId()).withFirstName("Yevgeny2").withLastName("Bondarenko2").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]"); //сохраняем старый идентификатор
+            .withID(modifiedContact.getId()).withFirstName("Yevgeny2").withLastName("Bondarenko2").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]"); //сохраняем старый идентификатор
     app.contact().modify(contact);
 
-    List<ContactData> after = app.contact().list(); //получаем список элементов после модификации
+    Set<ContactData> after = app.contact().all(); //получаем множество элементов после модификации
     Assert.assertEquals(after.size(), before.size());
 
-    before.remove(index); //удаляем последний элемент из списка
+    before.remove(modifiedContact); //удаляем последний элемент из множества
     before.add(contact); //вместо него добавляем тот, который должен появиться после модификации
 
-    Comparator<? super ContactData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
-    before.sort(byId);
-    after.sort(byId);
-
-    Assert.assertEquals(before, after); //сравниваем списки, т.к. они упорядочены по нашим правилам, написанным в компараторе
+    Assert.assertEquals(before, after); //сравниваем множества
 
   }
 

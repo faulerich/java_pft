@@ -6,6 +6,7 @@ import ru.stqa.pft.addressbook.model.ContactData;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 public class ContactCreationTests extends TestBase {
 
@@ -13,25 +14,26 @@ public class ContactCreationTests extends TestBase {
   public void contactGroupCreation() {
 
     app.goTo().contactList();
-    List<ContactData> before = app.contact().list(); //получаем список элементов до операции добавления
+    Set<ContactData> before = app.contact().all(); //получаем множество элементов до операции добавления
 
     System.out.println(before.size());
     ContactData contact = new ContactData()
-            .withFirstName("Yevgeny").withLastName( "Bondarenko").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("test1");
+            .withFirstName("Yevgeny").withLastName( "Bondarenko").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]");
     app.contact().create(contact, true);
     app.goTo().contactList();
-    List<ContactData> after = app.contact().list(); //получаем список элементов после операции добавления
+    Set<ContactData> after = app.contact().all(); //получаем множество элементов после операции добавления
     System.out.println(after.size());
-    Assert.assertEquals(after.size(), before.size() + 1); //сравниваем размеры списков, которые получены методом list
+    Assert.assertEquals(after.size(), before.size() + 1); //сравниваем размеры множеств, которые получены методом all
 
 
     //превращаем список в поток и вычислим максимальный элемент в потоке (max),
     // передав ему анонимную функцию (лямбда-выражение)
     //contact.setId(after.stream().max((o1, o2) -> Integer.compare(o1.getId(), o2.getId())).get().getId());
+
+    //превращаем поток объектов типа ContactData в поток идентификаторов с пом. mapToInt
+    //в качестве параметра он принимает анонимную функцию, у которой в качестве параметра указан контакт, а в качестве результата - его идентификатор
+    contact.withID(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()); //вычислили максимальный среди всех идентификаторов
     before.add(contact);
-    Comparator<? super ContactData> byId = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
-    before.sort(byId); //сортируем "старый" список
-    after.sort(byId); //сортируем "новый" список
     Assert.assertEquals(before, after); //сравниваем списки
 
   }

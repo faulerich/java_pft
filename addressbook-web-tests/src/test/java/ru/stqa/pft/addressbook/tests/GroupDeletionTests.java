@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.List;
+import java.util.Set;
 
 public class GroupDeletionTests extends TestBase {
 
@@ -20,14 +21,16 @@ public class GroupDeletionTests extends TestBase {
   @Test
   public void testGroupDeletion() {
 
-    List<GroupData> before = app.group().list(); //получаем список элементов до операции добавления
-    int index = before.size() - 1;
-    app.group().delete(index);
-    List<GroupData> after = app.group().list(); //получаем список элементов после операции добавления
+    Set<GroupData> before = app.group().all(); //получаем множество элементов до операции добавления
+    //элемент из списка выбирается случайным образом
+    //получим сначала итератор, который позволяет последовательно перебирать элементы, а потом вызвать next, который вернет первый попавшийся эл-т множества
+    GroupData deletedGroup = before.iterator().next();
+    app.group().delete(deletedGroup);
+    Set<GroupData> after = app.group().all(); //получаем множество элементов после операции добавления
     Assert.assertEquals(after.size(), before.size() - 1);
 
-    //чтобы убедиться в том, что группа корректно удалилась, мы сравниваем списки целиком: до удаления и после удаления
-    before.remove(index); //последний элемент
+    //чтобы убедиться в том, что группа корректно удалилась, мы сравниваем множества целиком: до удаления и после удаления
+    before.remove(deletedGroup); //полученный ранее элемент
     Assert.assertEquals(before, after);
 
   }

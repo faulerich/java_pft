@@ -11,7 +11,9 @@ import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Bond on 22.05.2017.
@@ -59,8 +61,16 @@ public class ContactHelper extends HelperBase {
     wd.switchTo().alert().accept();
   }
 
+  public void selectElement(int index) {
+    wd.findElements(By.name("selected[]")).get(index).click();
+  }
+
+  public void selectElementById(int id) {
+    wd.findElement(By.cssSelector("input[value='" + id + "']")).click();
+  }
+
   public void initContactModification(int index) {
-    click(By.xpath("//table[@id='maintable']/tbody/tr["+index+"]/td[8]/a/img"));
+    click(By.xpath("//a[@href='edit.php?id=" + index + "']"));
   }
 
 
@@ -70,7 +80,6 @@ public class ContactHelper extends HelperBase {
 
   public void create(ContactData contactData, boolean b) {
     initContactCreation();
-    //fillContactCreationForm(new ContactData("Yevgeny", "Bondarenko", "123", "test@test.com", "1985", "test1"), true);
     fillContactCreationForm(contactData, b);
     submitContactCreation();
   }
@@ -91,6 +100,12 @@ public class ContactHelper extends HelperBase {
     goToContactList();
   }
 
+  public void delete(ContactData contact) {
+    selectElementById(contact.getId());
+    deleteSelectedContacts();
+    goToContactList();
+  }
+
   //метод для получения списка контактов
   public List<ContactData> list() {
     List<ContactData> contacts = new ArrayList<ContactData>();
@@ -105,7 +120,19 @@ public class ContactHelper extends HelperBase {
     return contacts;
   }
 
-  public void selectElement(int index) {
-    wd.findElements(By.name("selected[]")).get(index).click();
+  //метод для получения множества контактов
+  public Set<ContactData> all() {
+    Set<ContactData> contacts = new HashSet<ContactData>();
+    List<WebElement> elements = wd.findElements(By.name("entry")); //выбираем список всех элементов
+    for (WebElement element : elements) { //переменная element пробегает по списку elements
+      String lastname = element.findElement(By.xpath(".//td[2]")).getText();
+      String firstname = element.findElement(By.xpath(".//td[3]")).getText();
+      int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value")); //ищем элемент внутри элемента
+      ContactData contact = new ContactData().withID(id).withFirstName(firstname).withLastName(lastname);
+      contacts.add(contact); //добавляем созданный объект в множество
+    }
+    return contacts;
   }
+
+
 }

@@ -7,7 +7,9 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Bond on 21.05.2017.
@@ -44,6 +46,10 @@ public class GroupHelper extends HelperBase {
     wd.findElements(By.name("selected[]")).get(index).click();
   }
 
+  public void selectElementById(int id) {
+    wd.findElement(By.cssSelector("input[value='" + id + "']")).click();
+  }
+
   public void initGroupModification() {
     click(By.name("edit"));
   }
@@ -67,8 +73,8 @@ public class GroupHelper extends HelperBase {
     return wd.findElements(By.name("selected[]")).size();     //получаем размер списка элементов
   }
 
-  public void modify(int index, GroupData group) {
-    selectElement(index); //выбираем последнюю группу
+  public void modify(GroupData group) {
+    selectElementById(group.getId()); //выбираем последнюю группу
     initGroupModification();
     fillGroupForm(group);
     submitGroupModification();
@@ -77,6 +83,12 @@ public class GroupHelper extends HelperBase {
 
   public void delete(int index) {
     selectElement(index);
+    deleteSelectedGroups();
+    returnToGroupPage();
+  }
+
+  public void delete(GroupData group) {
+    selectElementById(group.getId());
     deleteSelectedGroups();
     returnToGroupPage();
   }
@@ -93,4 +105,19 @@ public class GroupHelper extends HelperBase {
     }
     return groups;
   }
+
+  //метод возвращает не список, а уже готовое множество
+  public Set<GroupData> all() {
+    Set<GroupData> groups = new HashSet<GroupData>();
+    List<WebElement> elements = wd.findElements(By.cssSelector("span.group")); //выбираем список всех элементов с css-селектором span.group
+    for (WebElement element : elements) { //переменная element пробегает по списку elements
+      String name = element.getText();
+      int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value")); //ищем элемент внутри элемента
+      // GroupData group = new GroupData().withID(id). withName(name);
+      groups.add(new GroupData().withID(id). withName(name));//добавляем созданный объект в множество
+    }
+    return groups;
+  }
+
+
 }
