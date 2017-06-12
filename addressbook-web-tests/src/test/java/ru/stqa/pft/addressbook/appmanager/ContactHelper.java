@@ -8,6 +8,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.ArrayList;
@@ -121,8 +122,8 @@ public class ContactHelper extends HelperBase {
   }
 
   //метод для получения множества контактов
-  public Set<ContactData> all() {
-    Set<ContactData> contacts = new HashSet<ContactData>();
+  public Contacts all() {
+   Contacts contacts = new Contacts();
     List<WebElement> elements = wd.findElements(By.name("entry")); //выбираем список всех элементов
     for (WebElement element : elements) { //переменная element пробегает по списку elements
       String lastname = element.findElement(By.xpath(".//td[2]")).getText();

@@ -1,14 +1,13 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
-import ru.stqa.pft.addressbook.model.GroupData;
+import ru.stqa.pft.addressbook.model.Contacts;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.testng.Assert.assertEquals;
 
 /**
  * Created by Bond on 23.05.2017.
@@ -28,7 +27,7 @@ public class ContactModificationTests extends TestBase {
   public void testContactModification() {
 
     app.goTo().contactList();
-    Set<ContactData> before = app.contact().all(); //получаем множество элементов до модификации
+    Contacts before = app.contact().all(); //получаем множество элементов до модификации
     ContactData modifiedContact = before.iterator().next();
     System.out.println(modifiedContact.getId());
     app.contact().initContactModification(modifiedContact.getId());
@@ -36,13 +35,10 @@ public class ContactModificationTests extends TestBase {
             .withID(modifiedContact.getId()).withFirstName("Yevgeny2").withLastName("Bondarenko2").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]"); //сохраняем старый идентификатор
     app.contact().modify(contact);
 
-    Set<ContactData> after = app.contact().all(); //получаем множество элементов после модификации
-    Assert.assertEquals(after.size(), before.size());
+    Contacts after = app.contact().all(); //получаем множество элементов после модификации
+    assertEquals(after.size(), before.size());
 
-    before.remove(modifiedContact); //удаляем последний элемент из множества
-    before.add(contact); //вместо него добавляем тот, который должен появиться после модификации
-
-    Assert.assertEquals(before, after); //сравниваем множества
+    assertThat(after, equalTo(before.withoutAdded(modifiedContact).withAdded(contact)));
 
   }
 

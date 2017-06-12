@@ -1,12 +1,12 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.Contacts;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.testng.Assert.assertEquals;
 
 public class ContactCreationTests extends TestBase {
 
@@ -14,16 +14,16 @@ public class ContactCreationTests extends TestBase {
   public void contactGroupCreation() {
 
     app.goTo().contactList();
-    Set<ContactData> before = app.contact().all(); //получаем множество элементов до операции добавления
+    Contacts before = app.contact().all(); //получаем множество элементов до операции добавления
 
     System.out.println(before.size());
     ContactData contact = new ContactData()
             .withFirstName("Yevgeny").withLastName( "Bondarenko").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]");
     app.contact().create(contact, true);
     app.goTo().contactList();
-    Set<ContactData> after = app.contact().all(); //получаем множество элементов после операции добавления
-    System.out.println(after.size());
-    Assert.assertEquals(after.size(), before.size() + 1); //сравниваем размеры множеств, которые получены методом all
+    Contacts after = app.contact().all(); //получаем множество элементов после операции добавления
+    //System.out.println(after.size());
+    assertEquals(after.size(), before.size() + 1); //сравниваем размеры множеств, которые получены методом all
 
 
     //превращаем список в поток и вычислим максимальный элемент в потоке (max),
@@ -32,9 +32,10 @@ public class ContactCreationTests extends TestBase {
 
     //превращаем поток объектов типа ContactData в поток идентификаторов с пом. mapToInt
     //в качестве параметра он принимает анонимную функцию, у которой в качестве параметра указан контакт, а в качестве результата - его идентификатор
-    contact.withID(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()); //вычислили максимальный среди всех идентификаторов
-    before.add(contact);
-    Assert.assertEquals(before, after); //сравниваем списки
+
+    //используем библиотеку Hamcrest и сравниваем списки
+    assertThat(after, equalTo
+            (before.withAdded(contact.withID(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
 
   }
 

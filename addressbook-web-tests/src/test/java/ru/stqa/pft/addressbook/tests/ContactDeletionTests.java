@@ -1,13 +1,13 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
-import ru.stqa.pft.addressbook.model.GroupData;
+import ru.stqa.pft.addressbook.model.Contacts;
 
-import java.util.List;
-import java.util.Set;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.testng.Assert.assertEquals;
 
 public class ContactDeletionTests extends TestBase {
 
@@ -23,7 +23,7 @@ public class ContactDeletionTests extends TestBase {
   public void testContactDeletion() {
 
     app.goTo().contactList();
-    Set<ContactData> before = app.contact().all(); //получаем множество элементов до операции добавления
+    Contacts before = app.contact().all(); //получаем множество элементов до операции добавления
     System.out.println(before.size());
     app.goTo().contactList();
 
@@ -31,13 +31,12 @@ public class ContactDeletionTests extends TestBase {
 
     app.contact().delete(deletedContact);
 
-    Set<ContactData> after = app.contact().all();
+    Contacts after = app.contact().all();
     System.out.println(after.size());//получаем множество элементов после операции добавления
-    Assert.assertEquals(after.size(), before.size() - 1);
+    assertEquals(after.size(), before.size() - 1);
 
     //чтобы убедиться в том, что контакт успешно удалился, мы сравниваем множества целиком: до удаления и после удаления
-    before.remove(deletedContact); //последний элемент
-    Assert.assertEquals(before, after);
+    assertThat(after, equalTo(before.withoutAdded(deletedContact)));
 
   }
 

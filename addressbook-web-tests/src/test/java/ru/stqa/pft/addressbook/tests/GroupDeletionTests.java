@@ -1,12 +1,13 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.GroupData;
+import ru.stqa.pft.addressbook.model.Groups;
 
-import java.util.List;
-import java.util.Set;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.testng.Assert.assertEquals;
 
 public class GroupDeletionTests extends TestBase {
 
@@ -21,17 +22,18 @@ public class GroupDeletionTests extends TestBase {
   @Test
   public void testGroupDeletion() {
 
-    Set<GroupData> before = app.group().all(); //получаем множество элементов до операции добавления
+    Groups before = app.group().all(); //получаем множество элементов до операции добавления
     //элемент из списка выбирается случайным образом
     //получим сначала итератор, который позволяет последовательно перебирать элементы, а потом вызвать next, который вернет первый попавшийся эл-т множества
     GroupData deletedGroup = before.iterator().next();
     app.group().delete(deletedGroup);
-    Set<GroupData> after = app.group().all(); //получаем множество элементов после операции добавления
-    Assert.assertEquals(after.size(), before.size() - 1);
+    Groups after = app.group().all(); //получаем множество элементов после операции добавления
+    assertEquals(after.size(), before.size() - 1);
 
     //чтобы убедиться в том, что группа корректно удалилась, мы сравниваем множества целиком: до удаления и после удаления
-    before.remove(deletedGroup); //полученный ранее элемент
-    Assert.assertEquals(before, after);
+
+    assertThat(after, equalTo(before.withoutAdded(deletedGroup)));
+
 
   }
 

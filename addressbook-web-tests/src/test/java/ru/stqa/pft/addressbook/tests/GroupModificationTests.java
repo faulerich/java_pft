@@ -1,14 +1,13 @@
 package ru.stqa.pft.addressbook.tests;
 
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.GroupData;
+import ru.stqa.pft.addressbook.model.Groups;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.testng.Assert.assertEquals;
 
 /**
  * Created by Bond on 22.05.2017.
@@ -26,18 +25,15 @@ public class GroupModificationTests extends TestBase {
   @Test
   public void testGroupModification() {
 
-    Set<GroupData> before = app.group().all(); //получаем множество элементов до модификации
+    Groups before = app.group().all(); //получаем множество элементов до модификации
     GroupData modifiedGroup = before.iterator().next();
     GroupData group = new GroupData()
             .withID(modifiedGroup.getId()).withName("test2").withHeader("test3").withFooter("test4"); //сохраняем старый идентификатор
     app.group().modify(group);
-    Set<GroupData> after = app.group().all(); //получаем множество элементов после модификации
-    Assert.assertEquals(after.size(), before.size());
+    Groups after = app.group().all(); //получаем множество элементов после модификации
+    assertEquals(after.size(), before.size());
 
-    before.remove(modifiedGroup); //удаляем последний элемент из списка
-    before.add(group); //вместо него добавляем тот, который должен появиться после модификации
-
-    Assert.assertEquals(before, after); //сравниваем списки, т.к. они упорядочены по нашим правилам, написанным в компараторе
+    assertThat(after, equalTo(before.withoutAdded(modifiedGroup).withAdded(group)));
 
   }
 }
