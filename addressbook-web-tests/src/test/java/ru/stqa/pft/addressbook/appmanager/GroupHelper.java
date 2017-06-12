@@ -63,6 +63,7 @@ public class GroupHelper extends HelperBase {
     initGroupCreation();
     fillGroupForm(group);
     submitGroupCreation();
+    groupCache = null;
     returnToGroupPage();
   }
 
@@ -79,6 +80,7 @@ public class GroupHelper extends HelperBase {
     initGroupModification();
     fillGroupForm(group);
     submitGroupModification();
+    groupCache = null;
     returnToGroupPage();
   }
 
@@ -91,6 +93,7 @@ public class GroupHelper extends HelperBase {
   public void delete(GroupData group) {
     selectElementById(group.getId());
     deleteSelectedGroups();
+    groupCache = null;
     returnToGroupPage();
   }
 
@@ -107,17 +110,23 @@ public class GroupHelper extends HelperBase {
     return groups;
   }
 
+  private Groups groupCache = null;
+
   //метод возвращает не список, а уже готовое множество
   public Groups all() {
-    Groups groups = new Groups();
+    if (groupCache != null) {
+      return new Groups(groupCache);
+    }
+
+    groupCache = new Groups();
     List<WebElement> elements = wd.findElements(By.cssSelector("span.group")); //выбираем список всех элементов с css-селектором span.group
     for (WebElement element : elements) { //переменная element пробегает по списку elements
       String name = element.getText();
       int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value")); //ищем элемент внутри элемента
       // GroupData group = new GroupData().withID(id). withName(name);
-      groups.add(new GroupData().withID(id). withName(name));//добавляем созданный объект в множество
+      groupCache.add(new GroupData().withID(id). withName(name));//добавляем созданный объект в множество
     }
-    return groups;
+    return new Groups(groupCache);
   }
 
 

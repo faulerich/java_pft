@@ -10,6 +10,7 @@ import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
+import ru.stqa.pft.addressbook.model.Groups;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -83,6 +84,7 @@ public class ContactHelper extends HelperBase {
     initContactCreation();
     fillContactCreationForm(contactData, b);
     submitContactCreation();
+    contactCache = null;
   }
 
   public boolean isThereAContact() {
@@ -92,6 +94,7 @@ public class ContactHelper extends HelperBase {
   public void modify(ContactData contact) {
     fillContactCreationForm(contact, false);
     submitContactModification();
+    contactCache = null;
     goToContactList();
   }
 
@@ -104,6 +107,7 @@ public class ContactHelper extends HelperBase {
   public void delete(ContactData contact) {
     selectElementById(contact.getId());
     deleteSelectedContacts();
+    contactCache = null;
     goToContactList();
   }
 
@@ -121,18 +125,25 @@ public class ContactHelper extends HelperBase {
     return contacts;
   }
 
+  private Contacts contactCache = null;
+
   //метод для получения множества контактов
   public Contacts all() {
-   Contacts contacts = new Contacts();
+
+    if (contactCache != null) {
+      return new Contacts(contactCache);
+    }
+
+    contactCache = new Contacts();
     List<WebElement> elements = wd.findElements(By.name("entry")); //выбираем список всех элементов
     for (WebElement element : elements) { //переменная element пробегает по списку elements
       String lastname = element.findElement(By.xpath(".//td[2]")).getText();
       String firstname = element.findElement(By.xpath(".//td[3]")).getText();
       int id = Integer.parseInt(element.findElement(By.tagName("input")).getAttribute("value")); //ищем элемент внутри элемента
       ContactData contact = new ContactData().withID(id).withFirstName(firstname).withLastName(lastname);
-      contacts.add(contact); //добавляем созданный объект в множество
+      contactCache.add(contact); //добавляем созданный объект в множество
     }
-    return contacts;
+    return contactCache;
   }
 
 
