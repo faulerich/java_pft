@@ -35,9 +35,8 @@ public class ContactModificationTests extends TestBase {
             .withID(modifiedContact.getId()).withFirstName("Yevgeny2").withLastName("Bondarenko2").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]"); //сохраняем старый идентификатор
     app.contact().modify(contact);
 
+    assertThat(app.group().count(), equalTo(before.size()));
     Contacts after = app.contact().all(); //получаем множество элементов после модификации
-    assertEquals(after.size(), before.size());
-
     assertThat(after, equalTo(before.withoutAdded(modifiedContact).withAdded(contact)));
 
   }

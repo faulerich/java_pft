@@ -31,9 +31,9 @@ public class ContactDeletionTests extends TestBase {
 
     app.contact().delete(deletedContact);
 
+    assertThat(app.group().count(), equalTo(before.size() - 1));
     Contacts after = app.contact().all();
     System.out.println(after.size());//получаем множество элементов после операции добавления
-    assertEquals(after.size(), before.size() - 1);
 
     //чтобы убедиться в том, что контакт успешно удалился, мы сравниваем множества целиком: до удаления и после удаления
     assertThat(after, equalTo(before.withoutAdded(deletedContact)));

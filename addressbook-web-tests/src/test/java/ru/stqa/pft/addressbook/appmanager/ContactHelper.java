@@ -91,6 +91,11 @@ public class ContactHelper extends HelperBase {
     return isElementPresent(By.name("selected[]"));
   }
 
+  public int count() {
+    return wd.findElements(By.name("selected[]")).size();     //получаем размер списка элементов
+  }
+
+
   public void modify(ContactData contact) {
     fillContactCreationForm(contact, false);
     submitContactModification();

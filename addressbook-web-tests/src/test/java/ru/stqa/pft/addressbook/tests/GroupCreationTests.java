@@ -21,7 +21,7 @@ public class GroupCreationTests extends TestBase {
     Groups after = app.group().all(); //получаем множество элементов после операции добавления
 
     assertEquals(after.size(), before.size() + 1); //сравниваем размеры множеств, которые получены методом all
-   // System.out.println(after.size());
+    // System.out.println(after.size());
 
 //превращаем поток объектов типа GroupData в поток идентификаторов с пом. mapToInt
     //в качестве параметра он принимает анонимную функцию, у которой в качестве параметра указана группа, а в качестве результата - ее идентификатор
@@ -31,6 +31,21 @@ public class GroupCreationTests extends TestBase {
             (before.withAdded(group.withID(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
 
 
+  }
+
+  @Test  //негативный тест. проверяет, что нельзя создать группу с именем, содержащим апостроф
+  public void testBadGroupCreation() {
+    app.goTo().groupPage();
+    Groups before = app.group().all(); //получаем множество элементов до операции добавления
+
+    System.out.println(before.size());
+    GroupData group = new GroupData().withName("test3'");
+    app.group().create(group);
+
+    assertEquals(app.group().count(), before.size());
+    Groups after = app.group().all(); //получаем множество элементов после операции добавления
+
+    assertThat(after, equalTo(before));
   }
 
 }

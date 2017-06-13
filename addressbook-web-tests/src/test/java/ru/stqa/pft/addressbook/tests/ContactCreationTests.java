@@ -18,7 +18,7 @@ public class ContactCreationTests extends TestBase {
 
     System.out.println(before.size());
     ContactData contact = new ContactData()
-            .withFirstName("Yevgeny").withLastName( "Bondarenko").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]");
+            .withFirstName("Yevgeny").withLastName("Bondarenko").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]");
     app.contact().create(contact, true);
     app.goTo().contactList();
     Contacts after = app.contact().all(); //получаем множество элементов после операции добавления
@@ -37,6 +37,23 @@ public class ContactCreationTests extends TestBase {
     assertThat(after, equalTo
             (before.withAdded(contact.withID(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
 
+  }
+
+  @Test  //негативный тест. проверяет, что нельзя создать контакт с именем, содержащим апостроф
+  public void contactBadGroupCreation() {
+
+    app.goTo().contactList();
+    Contacts before = app.contact().all(); //получаем множество элементов до операции добавления
+
+    System.out.println(before.size());
+    ContactData contact = new ContactData()
+            .withFirstName("Yevgeny").withLastName("Bondarenko'").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]");
+    app.contact().create(contact, true);
+    app.goTo().contactList();
+
+    assertEquals(app.contact().count(), before.size()); //сравниваем размеры множеств, которые получены методом all
+    Contacts after = app.contact().all();
+    assertThat(after, equalTo(before));
   }
 
 }

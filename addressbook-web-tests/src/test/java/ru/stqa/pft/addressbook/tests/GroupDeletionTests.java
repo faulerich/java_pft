@@ -27,11 +27,11 @@ public class GroupDeletionTests extends TestBase {
     //получим сначала итератор, который позволяет последовательно перебирать элементы, а потом вызвать next, который вернет первый попавшийся эл-т множества
     GroupData deletedGroup = before.iterator().next();
     app.group().delete(deletedGroup);
+
+    assertThat(app.group().count(), equalTo(before.size() - 1));
     Groups after = app.group().all(); //получаем множество элементов после операции добавления
-    assertEquals(after.size(), before.size() - 1);
 
     //чтобы убедиться в том, что группа корректно удалилась, мы сравниваем множества целиком: до удаления и после удаления
-
     assertThat(after, equalTo(before.withoutAdded(deletedGroup)));
 
 
