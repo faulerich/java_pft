@@ -4,6 +4,8 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 
+import java.util.Set;
+
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testng.Assert.assertEquals;
@@ -43,7 +45,7 @@ public class ContactCreationTests extends TestBase {
   public void contactBadGroupCreation() {
 
     app.goTo().contactList();
-    Contacts before = app.contact().all(); //получаем множество элементов до операции добавления
+    Set<ContactData> before = app.contact().all(); //получаем множество элементов до операции добавления
 
     System.out.println(before.size());
     ContactData contact = new ContactData()
@@ -52,7 +54,7 @@ public class ContactCreationTests extends TestBase {
     app.goTo().contactList();
 
     assertEquals(app.contact().count(), before.size()); //сравниваем размеры множеств, которые получены методом all
-    Contacts after = app.contact().all();
+    Set<ContactData> after = app.contact().all();
     assertThat(after, equalTo(before));
   }
 
