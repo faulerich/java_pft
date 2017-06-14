@@ -7,9 +7,14 @@ public class ContactData {
   private String homephone;
   private String workphone;
   private String mobilephone;
+  private String firstemail;
+  private String secondemail;
+  private String thirdemail;
   private String email;
   private String birthyear;
   private String allPhones;
+  private String allEmails;
+  private String address;
 
   public String getAllPhones() {
     return allPhones;
@@ -17,6 +22,15 @@ public class ContactData {
 
   public ContactData withAllPhones(String allPhones) {
     this.allPhones = allPhones;
+    return this;
+  }
+
+  public String getAllEmails() {
+    return allEmails;
+  }
+
+  public ContactData withAllEmails(String allEmails) {
+    this.allEmails = allEmails;
     return this;
   }
 
@@ -90,6 +104,21 @@ public class ContactData {
     return this;
   }
 
+  public ContactData withFirstEmail(String firstemail) {
+    this.firstemail = firstemail;
+    return this;
+  }
+
+  public ContactData withSecondEmail(String secondemail) {
+    this.secondemail = secondemail;
+    return this;
+  }
+
+  public ContactData withThirdEmail(String thirdemail) {
+    this.thirdemail = thirdemail;
+    return this;
+  }
+
   public ContactData withBirthyear(String birthyear) {
     this.birthyear = birthyear;
     return this;
@@ -97,6 +126,11 @@ public class ContactData {
 
   public ContactData withGroup(String group) {
     this.group = group;
+    return this;
+  }
+
+  public ContactData withAddress(String address) {
+    this.address = address;
     return this;
   }
 
@@ -124,11 +158,27 @@ public class ContactData {
     return email;
   }
 
+  public String getFirstEmail() {
+    return firstemail;
+  }
+
+  public String getSecondEmail() {
+    return secondemail;
+  }
+
+  public String getThirdEmail() {
+    return thirdemail;
+  }
+
   public String getBirthyear() {
     return birthyear;
   }
 
   public String getGroup() {
     return group;
+  }
+
+  public String getFullAddress() {
+    return address;
   }
 }
