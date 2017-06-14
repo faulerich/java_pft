@@ -9,6 +9,16 @@ public class ContactData {
   private String mobilephone;
   private String email;
   private String birthyear;
+  private String allPhones;
+
+  public String getAllPhones() {
+    return allPhones;
+  }
+
+  public ContactData withAllPhones(String allPhones) {
+    this.allPhones = allPhones;
+    return this;
+  }
 
 
   @Override

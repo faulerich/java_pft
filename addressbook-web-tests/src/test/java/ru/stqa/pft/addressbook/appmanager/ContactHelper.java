@@ -166,8 +166,8 @@ public class ContactHelper extends HelperBase {
       int id = Integer.parseInt(cells.get(0).findElement(By.tagName("input")).getAttribute("value")); //ищем элемент внутри элемента
       String lastname = cells.get(1).getText();
       String firstname = cells.get(2).getText();
-      String[] phones = cells.get(5).getText().split("\n");
-      contactCache.add(new ContactData().withID(id).withFirstName(firstname).withLastName(lastname).withHomephone(phones[0]).withMobilephone(phones[1]).withWorkphone(phones[2]));
+      String allPhones = cells.get(5).getText(); //получаем строку, состоящую из телефонов
+      contactCache.add(new ContactData().withID(id).withFirstName(firstname).withLastName(lastname).withAllPhones(allPhones));
     }
     return contactCache;
   }
