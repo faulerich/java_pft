@@ -1,5 +1,8 @@
 package ru.stqa.pft.addressbook.generators;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
 import ru.stqa.pft.addressbook.model.ContactData;
 
 import java.io.File;
@@ -14,16 +17,34 @@ import java.util.List;
  */
 public class ContactDataGenerator {
 
-  public static void main(String[] args) throws IOException {
-    int count = Integer.parseInt(args[0]);
-    File file = new File(args[1]);  //путь к файлу
+  @Parameter(names = "-c", description = "Contact count")
+  public int count;
 
+  @Parameter(names = "-f", description = "Target file")
+  public String file;
+
+  public static void main(String[] args) throws IOException {
+    ContactDataGenerator generator = new ContactDataGenerator();
+    JCommander jCommander = new JCommander(generator);
+
+    try {
+      jCommander.parse(args);
+    } catch (ParameterException ex) {
+      jCommander.usage();
+      return;
+    }
+
+    generator.run();
+
+  }
+
+  private void run() throws IOException {
     List<ContactData> contacts = generateContacts(count);
-    save(contacts, file);
+    save(contacts, new File(file));
   }
 
   //сохраним в файл список контактов, сформированный ниже
-  private static void save(List<ContactData> contacts, File file) throws IOException {
+  private void save(List<ContactData> contacts, File file) throws IOException {
     System.out.println(new File(".").getAbsolutePath()); //узнаем текущий путь
     Writer writer = new FileWriter(file);
     //цикл записи в файл для всех групп
@@ -34,7 +55,7 @@ public class ContactDataGenerator {
   }
 
   //заполняем генератор
-  private static List<ContactData> generateContacts(int count) {
+  private List<ContactData> generateContacts(int count) {
     List<ContactData> contacts = new ArrayList<ContactData>();
     for (int i = 0; i < count; i++) {
       contacts.add(new ContactData().withFirstName(String.format("firstname %s", i)).withLastName(String.format("lastname %s", i)));
