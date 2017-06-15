@@ -4,6 +4,7 @@ import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 
+import java.io.File;
 import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -19,21 +20,15 @@ public class ContactCreationTests extends TestBase {
     Contacts before = app.contact().all(); //получаем множество элементов до операции добавления
 
     System.out.println(before.size());
+    File photo = new File("src/test/resources/pchelovodstvo.jpg");  //указываем относительный путь к файлу (путь относительно рабочей директории программы.
+                                                                              // рабочая директория вычисляется методом getAbsolutePath)
     ContactData contact = new ContactData()
-            .withFirstName("Yevgeny").withLastName("Bondarenko").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]");
+            .withFirstName("Yevgeny").withLastName("Bondarenko").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]").withPhoto(photo);
     app.contact().create(contact, true);
     app.goTo().contactList();
     Contacts after = app.contact().all(); //получаем множество элементов после операции добавления
-    //System.out.println(after.size());
+
     assertEquals(after.size(), before.size() + 1); //сравниваем размеры множеств, которые получены методом all
-
-
-    //превращаем список в поток и вычислим максимальный элемент в потоке (max),
-    // передав ему анонимную функцию (лямбда-выражение)
-    //contact.setId(after.stream().max((o1, o2) -> Integer.compare(o1.getId(), o2.getId())).get().getId());
-
-    //превращаем поток объектов типа ContactData в поток идентификаторов с пом. mapToInt
-    //в качестве параметра он принимает анонимную функцию, у которой в качестве параметра указан контакт, а в качестве результата - его идентификатор
 
     //используем библиотеку Hamcrest и сравниваем списки
     assertThat(after, equalTo
@@ -41,7 +36,20 @@ public class ContactCreationTests extends TestBase {
 
   }
 
-  @Test  //негативный тест. проверяет, что нельзя создать контакт с именем, содержащим апостроф
+  @Test  (enabled = false) //вспомогательный тест, который определяет, какая директория является рабочей
+  public void testCurrentDir() {
+    File currentDir = new File(".");
+
+    //определим абсолютный путь к директории
+    System.out.println(currentDir.getAbsolutePath());
+
+    //убедимся, что файл существует
+    File photo = new File("src/test/resources/pchelovodstvo.jpg");
+    System.out.println(photo.getAbsolutePath());
+    System.out.println(photo.exists());
+  }
+
+  @Test  (enabled = false) //негативный тест. проверяет, что нельзя создать контакт с именем, содержащим апостроф
   public void contactBadGroupCreation() {
 
     app.goTo().contactList();

@@ -9,9 +9,7 @@ import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Bond on 22.05.2017.
@@ -44,6 +42,7 @@ public class ContactHelper extends HelperBase {
     type(By.name("home"), contactData.getHomephone());
     type(By.name("email"), contactData.getEmail());
     type(By.name("byear"), contactData.getBirthyear());
+    attach(By.name("photo"), contactData.getPhoto());
 
 
     if (creation) {
