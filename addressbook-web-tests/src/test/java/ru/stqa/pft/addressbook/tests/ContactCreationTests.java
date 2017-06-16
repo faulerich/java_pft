@@ -1,10 +1,15 @@
 package ru.stqa.pft.addressbook.tests;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import static org.hamcrest.CoreMatchers.equalTo;
@@ -13,17 +18,21 @@ import static org.testng.Assert.assertEquals;
 
 public class ContactCreationTests extends TestBase {
 
-  @Test
-  public void contactGroupCreation() {
+  @DataProvider
+  public Iterator<Object[]> validContacts() {
+    List<Object[]> list = new ArrayList<Object[]>();
+    list.add(new Object[]{new ContactData().withFirstName("Yevgeny11").withLastName("Bondarenko11").withGroup("[none]")});
+    list.add(new Object[]{new ContactData().withFirstName("Yevgeny22").withLastName("Bondarenko22").withGroup("[none]")});
+    list.add(new Object[]{new ContactData().withFirstName("Yevgeny33").withLastName("Bondarenko33").withGroup("[none]")});
+    return list.iterator();
+  }
+
+  @Test (dataProvider = "validContacts")
+  public void contactGroupCreation(ContactData contact) {
 
     app.goTo().contactList();
     Contacts before = app.contact().all(); //получаем множество элементов до операции добавления
 
-    System.out.println(before.size());
-    File photo = new File("src/test/resources/pchelovodstvo.jpg");  //указываем относительный путь к файлу (путь относительно рабочей директории программы.
-                                                                              // рабочая директория вычисляется методом getAbsolutePath)
-    ContactData contact = new ContactData()
-            .withFirstName("Yevgeny").withLastName("Bondarenko").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]").withPhoto(photo);
     app.contact().create(contact, true);
     app.goTo().contactList();
     Contacts after = app.contact().all(); //получаем множество элементов после операции добавления
