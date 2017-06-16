@@ -6,7 +6,7 @@ import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -19,11 +19,15 @@ import static org.testng.Assert.assertEquals;
 public class ContactCreationTests extends TestBase {
 
   @DataProvider
-  public Iterator<Object[]> validContacts() {
+  public Iterator<Object[]> validContacts() throws IOException {
     List<Object[]> list = new ArrayList<Object[]>();
-    list.add(new Object[]{new ContactData().withFirstName("Yevgeny11").withLastName("Bondarenko11").withGroup("[none]")});
-    list.add(new Object[]{new ContactData().withFirstName("Yevgeny22").withLastName("Bondarenko22").withGroup("[none]")});
-    list.add(new Object[]{new ContactData().withFirstName("Yevgeny33").withLastName("Bondarenko33").withGroup("[none]")});
+    BufferedReader reader = new BufferedReader(new FileReader(new File ("src/test/resources/contact.csv"))); //создаем "читальщик"
+    String line = reader.readLine();
+    while (line != null) {
+      String[] split = line.split(";");//обработка прочитанных строк (каждую из них делим на части по разделителю ";")
+      list.add(new Object[] {new ContactData().withFirstName(split[0]).withLastName(split[1]).withGroup(split[2])}); //строим из полученных кусочков объект и добавляем его в список
+      line = reader.readLine(); // читаем строки
+    }
     return list.iterator();
   }
 
