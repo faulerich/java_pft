@@ -1,7 +1,10 @@
 package ru.stqa.pft.addressbook.model;
 
+import com.thoughtworks.xstream.annotations.XStreamOmitField;
+
 public class GroupData {
   private String name;
+  @XStreamOmitField
   private int id = Integer.MAX_VALUE;;  //модификатор final убрали, т.к. с ним мы не сгенерируем setter
   private String header;
 
