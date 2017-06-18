@@ -1,16 +1,21 @@
 package ru.stqa.pft.addressbook.tests;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.thoughtworks.xstream.XStream;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
-import ru.stqa.pft.addressbook.model.GroupData;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,20 +23,36 @@ import static org.testng.Assert.assertEquals;
 
 public class ContactCreationTests extends TestBase {
 
-  @DataProvider
-  public Iterator<Object[]> validContacts() throws IOException {
-    List<Object[]> list = new ArrayList<Object[]>();
-    BufferedReader reader = new BufferedReader(new FileReader(new File ("src/test/resources/contact.csv"))); //создаем "читальщик"
+  @DataProvider  //для XML
+  public Iterator<Object[]> validContactsfromXML() throws IOException {
+    BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/contact.xml"))); //создаем "читальщик"
+    String xml = "";
     String line = reader.readLine();
     while (line != null) {
-      String[] split = line.split(";");//обработка прочитанных строк (каждую из них делим на части по разделителю ";")
-      list.add(new Object[] {new ContactData().withFirstName(split[0]).withLastName(split[1]).withGroup(split[2])}); //строим из полученных кусочков объект и добавляем его в список
+      xml += line;
       line = reader.readLine(); // читаем строки
     }
-    return list.iterator();
+    XStream xstream = new XStream();
+    xstream.processAnnotations(ContactData.class);
+    List<ContactData> contacts = (List<ContactData>) xstream.fromXML(xml);  //читаем данные из xml
+    return contacts.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
   }
 
-  @Test (dataProvider = "validContacts")
+  @DataProvider  //для JSON
+  public Iterator<Object[]> validContactsfromJson() throws IOException {
+    BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/contact.json"))); //создаем "читальщик"
+    String json = "";
+    String line = reader.readLine();
+    while (line != null) {
+      json += line;
+      line = reader.readLine(); // читаем строки
+    }
+    Gson gson = new Gson();
+    List<ContactData> contacts = gson.fromJson(json, new TypeToken<List<ContactData>>(){}.getType());
+    return contacts.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
+  }
+
+  @Test (dataProvider = "validContactsfromJson")
   public void contactGroupCreation(ContactData contact) {
 
     app.goTo().contactList();
