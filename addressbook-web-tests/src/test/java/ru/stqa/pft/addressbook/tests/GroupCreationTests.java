@@ -25,31 +25,36 @@ public class GroupCreationTests extends TestBase {
 
   @DataProvider //для XML
   public Iterator<Object[]> validGroupsfromXML() throws IOException {
-    BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/group.xml"))); //создаем "читальщик"
-    String xml = "";
-    String line = reader.readLine();
-    while (line != null) {
-      xml += line;
-      line = reader.readLine(); // читаем строки
+    try (BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/group.xml"))))  //создаем "читальщик"
+    {
+      String xml = "";
+      String line = reader.readLine();
+      while (line != null) {
+        xml += line;
+        line = reader.readLine(); // читаем строки
+      }
+      XStream xstream = new XStream();
+      xstream.processAnnotations(GroupData.class);
+      List<GroupData> groups = (List<GroupData>) xstream.fromXML(xml); //читаем данные из xml
+      return groups.stream().map((g) -> new Object[]{g}).collect(Collectors.toList()).iterator();
     }
-    XStream xstream = new XStream();
-    xstream.processAnnotations(GroupData.class);
-    List<GroupData> groups = (List<GroupData>) xstream.fromXML(xml); //читаем данные из xml
-    return groups.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
   }
 
   @DataProvider  //для JSON
   public Iterator<Object[]> validGroupsfromJson() throws IOException {
-    BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/group.json"))); //создаем "читальщик"
-    String json = "";
-    String line = reader.readLine();
-    while (line != null) {
-      json += line;
-      line = reader.readLine(); // читаем строки
+    try (BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/group.json")))) //создаем "читальщик"
+    {
+      String json = "";
+      String line = reader.readLine();
+      while (line != null) {
+        json += line;
+        line = reader.readLine(); // читаем строки
+      }
+      Gson gson = new Gson();
+      List<GroupData> groups = gson.fromJson(json, new TypeToken<List<GroupData>>() {
+      }.getType());
+      return groups.stream().map((g) -> new Object[]{g}).collect(Collectors.toList()).iterator();
     }
-    Gson gson = new Gson();
-    List<GroupData> groups = gson.fromJson(json, new TypeToken<List<GroupData>>(){}.getType());
-    return groups.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
   }
 
   @Test(dataProvider = "validGroupsfromXML")
@@ -74,7 +79,7 @@ public class GroupCreationTests extends TestBase {
 
   }
 
-  @Test  (enabled = false) //негативный тест. проверяет, что нельзя создать группу с именем, содержащим апостроф
+  @Test(enabled = false) //негативный тест. проверяет, что нельзя создать группу с именем, содержащим апостроф
   public void testBadGroupCreation() {
     app.goTo().groupPage();
     Groups before = app.group().all(); //получаем множество элементов до операции добавления

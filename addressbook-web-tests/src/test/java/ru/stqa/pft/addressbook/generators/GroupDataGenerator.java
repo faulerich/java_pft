@@ -60,9 +60,9 @@ public class GroupDataGenerator {
   private void saveAsJson(List<GroupData> groups, File file) throws IOException {
     Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
     String json = gson.toJson(groups);
-    Writer writer = new FileWriter(file);
-    writer.write(json);
-    writer.close();
+    try (Writer writer = new FileWriter(file)) {
+      writer.write(json);
+    }
   }
 
   //сохраним в файл XML список контактов, сформированный ниже в generateGroups
@@ -71,21 +71,20 @@ public class GroupDataGenerator {
     //xstream.alias("group", GroupData.class);
     xstream.processAnnotations(GroupData.class);
     String xml = xstream.toXML(groups);
-    Writer writer = new FileWriter(file);
-    writer.write(xml);
-    writer.close();
-
+    try (Writer writer = new FileWriter(file)) {
+      writer.write(xml);
+    }
   }
 
   //сохраним в файл CSV список контактов, сформированный ниже в generateGroups
   private void saveAsCsv(List<GroupData> groups, File file) throws IOException {
     System.out.println(new File(".").getAbsolutePath()); //узнаем-ка текущий путь
-    Writer writer = new FileWriter(file);
-    //цикл записи в файл для всех групп
-    for (GroupData group : groups) {
-      writer.write(String.format("%s;%s;%s\n", group.getName(), group.getHeader(), group.getFooter()));
+    try (Writer writer = new FileWriter(file)) {
+      //цикл записи в файл для всех групп
+      for (GroupData group : groups) {
+        writer.write(String.format("%s;%s;%s\n", group.getName(), group.getHeader(), group.getFooter()));
+      }
     }
-    writer.close();
   }
 
   //заполняем генератор

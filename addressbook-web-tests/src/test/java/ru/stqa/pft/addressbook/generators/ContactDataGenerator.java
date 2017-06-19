@@ -61,9 +61,9 @@ public class ContactDataGenerator {
   private void saveAsJson(List<ContactData> contacts, File file) throws IOException {
     Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
     String json = gson.toJson(contacts);
-    Writer writer = new FileWriter(file);
-    writer.write(json);
-    writer.close();
+    try (Writer writer = new FileWriter(file)) {
+      writer.write(json);
+    }
   }
 
   //сохраним в файл XML список контактов, сформированный ниже в generateContacts
@@ -72,21 +72,20 @@ public class ContactDataGenerator {
     //xstream.alias("contact", ContactData.class);
     xstream.processAnnotations(ContactData.class);
     String xml = xstream.toXML(contacts);
-    Writer writer = new FileWriter(file);
-    writer.write(xml);
-    writer.close();
-
+    try (Writer writer = new FileWriter(file)) {
+      writer.write(xml);
+    }
   }
 
   //сохраним в файл CSV список контактов, сформированный ниже в generateContacts
   private void saveAsCsv(List<ContactData> contacts, File file) throws IOException {
     System.out.println(new File(".").getAbsolutePath()); //узнаем текущий путь
-    Writer writer = new FileWriter(file);
-    //цикл записи в файл для всех групп
-    for (ContactData contact : contacts) {
-      writer.write(String.format("%s;%s;%s\n", contact.getFirstname(), contact.getLastname(), contact.getGroup()));
+    try (Writer writer = new FileWriter(file)) {
+      //цикл записи в файл для всех групп
+      for (ContactData contact : contacts) {
+        writer.write(String.format("%s;%s;%s\n", contact.getFirstname(), contact.getLastname(), contact.getGroup()));
+      }
     }
-    writer.close();
   }
 
   //заполняем генератор

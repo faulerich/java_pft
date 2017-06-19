@@ -25,34 +25,39 @@ public class ContactCreationTests extends TestBase {
 
   @DataProvider  //для XML
   public Iterator<Object[]> validContactsfromXML() throws IOException {
-    BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/contact.xml"))); //создаем "читальщик"
-    String xml = "";
-    String line = reader.readLine();
-    while (line != null) {
-      xml += line;
-      line = reader.readLine(); // читаем строки
+    try (BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/contact.xml")))) //создаем "читальщик"
+    {
+      String xml = "";
+      String line = reader.readLine();
+      while (line != null) {
+        xml += line;
+        line = reader.readLine(); // читаем строки
+      }
+      XStream xstream = new XStream();
+      xstream.processAnnotations(ContactData.class);
+      List<ContactData> contacts = (List<ContactData>) xstream.fromXML(xml);  //читаем данные из xml
+      return contacts.stream().map((g) -> new Object[]{g}).collect(Collectors.toList()).iterator();
     }
-    XStream xstream = new XStream();
-    xstream.processAnnotations(ContactData.class);
-    List<ContactData> contacts = (List<ContactData>) xstream.fromXML(xml);  //читаем данные из xml
-    return contacts.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
   }
 
   @DataProvider  //для JSON
   public Iterator<Object[]> validContactsfromJson() throws IOException {
-    BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/contact.json"))); //создаем "читальщик"
-    String json = "";
-    String line = reader.readLine();
-    while (line != null) {
-      json += line;
-      line = reader.readLine(); // читаем строки
+    try (BufferedReader reader = new BufferedReader(new FileReader(new File("src/test/resources/contact.json")))) //создаем "читальщик"
+    {
+      String json = "";
+      String line = reader.readLine();
+      while (line != null) {
+        json += line;
+        line = reader.readLine(); // читаем строки
+      }
+      Gson gson = new Gson();
+      List<ContactData> contacts = gson.fromJson(json, new TypeToken<List<ContactData>>() {
+      }.getType());
+      return contacts.stream().map((g) -> new Object[]{g}).collect(Collectors.toList()).iterator();
     }
-    Gson gson = new Gson();
-    List<ContactData> contacts = gson.fromJson(json, new TypeToken<List<ContactData>>(){}.getType());
-    return contacts.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
   }
 
-  @Test (dataProvider = "validContactsfromXML")
+  @Test(dataProvider = "validContactsfromXML")
   public void contactGroupCreation(ContactData contact) {
 
     app.goTo().contactList();
@@ -70,7 +75,7 @@ public class ContactCreationTests extends TestBase {
 
   }
 
-  @Test  (enabled = false) //вспомогательный тест, который определяет, какая директория является рабочей
+  @Test(enabled = false) //вспомогательный тест, который определяет, какая директория является рабочей
   public void testCurrentDir() {
     File currentDir = new File(".");
 
@@ -83,7 +88,7 @@ public class ContactCreationTests extends TestBase {
     System.out.println(photo.exists());
   }
 
-  @Test  (enabled = false) //негативный тест. проверяет, что нельзя создать контакт с именем, содержащим апостроф
+  @Test(enabled = false) //негативный тест. проверяет, что нельзя создать контакт с именем, содержащим апостроф
   public void contactBadGroupCreation() {
 
     app.goTo().contactList();
