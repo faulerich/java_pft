@@ -14,3 +14,16 @@ compile 'org.testng:testng:6.11'
 
 
 }
+
+//используем конфигурационные файлы с настройками запуска тестов
+task testGroups (type: Test) {
+    useTestNG {
+        suites 'src/test/resources/testng-groups.xml'
+    }
+}
+
+task testContacts (type: Test) {
+    useTestNG {
+        suites 'src/test/resources/testng-contacts.xml'
+    }
+}
