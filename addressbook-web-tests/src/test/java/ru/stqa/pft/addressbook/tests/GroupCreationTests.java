@@ -1,8 +1,8 @@
 package ru.stqa.pft.addressbook.tests;
 
+import com.thoughtworks.xstream.XStream;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.thoughtworks.xstream.XStream;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.GroupData;
@@ -20,6 +20,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testng.Assert.assertEquals;
 
+@SuppressWarnings("unchecked")
 public class GroupCreationTests extends TestBase {
 
   @DataProvider //для XML
@@ -33,7 +34,7 @@ public class GroupCreationTests extends TestBase {
     }
     XStream xstream = new XStream();
     xstream.processAnnotations(GroupData.class);
-    List<GroupData> groups = (List<GroupData>) xstream.fromXML(xml);  //читаем данные из xml
+    List<GroupData> groups = (List<GroupData>) xstream.fromXML(xml); //читаем данные из xml
     return groups.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
   }
 
@@ -51,7 +52,7 @@ public class GroupCreationTests extends TestBase {
     return groups.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
   }
 
-  @Test(dataProvider = "validGroupsfromJson")
+  @Test(dataProvider = "validGroupsfromXML")
   public void testGroupCreation(GroupData group) {
     app.goTo().groupPage();
     Groups before = app.group().all(); //получаем множество элементов до операции добавления

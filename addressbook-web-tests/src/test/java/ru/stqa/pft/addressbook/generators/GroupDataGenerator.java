@@ -68,7 +68,7 @@ public class GroupDataGenerator {
   //сохраним в файл XML список контактов, сформированный ниже в generateGroups
   private void saveAsXml(List<GroupData> groups, File file) throws IOException {
     XStream xstream = new XStream();
-    xstream.alias("group", GroupData.class);
+    //xstream.alias("group", GroupData.class);
     xstream.processAnnotations(GroupData.class);
     String xml = xstream.toXML(groups);
     Writer writer = new FileWriter(file);

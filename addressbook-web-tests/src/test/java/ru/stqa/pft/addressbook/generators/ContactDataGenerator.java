@@ -69,7 +69,7 @@ public class ContactDataGenerator {
   //сохраним в файл XML список контактов, сформированный ниже в generateContacts
   private void saveAsXml(List<ContactData> contacts, File file) throws IOException {
     XStream xstream = new XStream();
-    xstream.alias("contact", ContactData.class);
+    //xstream.alias("contact", ContactData.class);
     xstream.processAnnotations(ContactData.class);
     String xml = xstream.toXML(contacts);
     Writer writer = new FileWriter(file);

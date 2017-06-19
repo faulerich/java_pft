@@ -52,7 +52,7 @@ public class ContactCreationTests extends TestBase {
     return contacts.stream().map((g) -> new Object[] {g}).collect(Collectors.toList()).iterator();
   }
 
-  @Test (dataProvider = "validContactsfromJson")
+  @Test (dataProvider = "validContactsfromXML")
   public void contactGroupCreation(ContactData contact) {
 
     app.goTo().contactList();
