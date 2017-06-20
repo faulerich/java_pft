@@ -1,8 +1,8 @@
 package ru.stqa.pft.addressbook.tests;
 
-import com.thoughtworks.xstream.XStream;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.thoughtworks.xstream.XStream;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.GroupData;
@@ -61,7 +61,6 @@ public class GroupCreationTests extends TestBase {
   public void testGroupCreation(GroupData group) {
     app.goTo().groupPage();
     Groups before = app.group().all(); //получаем множество элементов до операции добавления
-
     app.group().create(group);
     assertEquals(app.group().count(), before.size() + 1); //сравниваем размеры множеств, которые получены методом all
     Groups after = app.group().all(); //получаем множество элементов после операции добавления
@@ -75,7 +74,6 @@ public class GroupCreationTests extends TestBase {
     //используем библиотеку Hamcrest и сравниваем списки
     assertThat(after, equalTo
             (before.withAdded(group.withID(after.stream().mapToInt((g) -> g.getId()).max().getAsInt()))));
-
 
   }
 

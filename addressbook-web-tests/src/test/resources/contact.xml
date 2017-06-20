@@ -9,14 +9,4 @@
     <lastname>lastname 1</lastname>
     <group>[none]</group>
   </contact>
-  <contact>
-    <firstname>firstname 2</firstname>
-    <lastname>lastname 2</lastname>
-    <group>[none]</group>
-  </contact>
-  <contact>
-    <firstname>firstname 3</firstname>
-    <lastname>lastname 3</lastname>
-    <group>[none]</group>
-  </contact>
 </list>

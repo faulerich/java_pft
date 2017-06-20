@@ -57,7 +57,7 @@ public class ContactCreationTests extends TestBase {
     }
   }
 
-  @Test(dataProvider = "validContactsfromXML")
+  @Test (dataProvider = "validContactsfromXML")
   public void contactGroupCreation(ContactData contact) {
 
     app.goTo().contactList();
