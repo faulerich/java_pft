@@ -7,17 +7,16 @@ import ru.stqa.pft.addressbook.model.Groups;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.testng.Assert.assertEquals;
 
 /**
  * Created by Bond on 22.05.2017.
  */
 public class GroupModificationTests extends TestBase {
 
-  @BeforeMethod   //перед каждым тестовым методом должна выполняться проверка предусловия
+  @BeforeMethod
   public void ensurePreconditions() {  //проверяем предусловия: если список групп пуст, то создаем группу
-    app.goTo().groupPage();
-    if (app.group().list().size() == 0) {
+    if (app.db().groups().size() == 0) {
+      app.goTo().groupPage();
       app.group().create(new GroupData().withName("test1"));
     }
   }
@@ -25,14 +24,15 @@ public class GroupModificationTests extends TestBase {
   @Test
   public void testGroupModification() {
 
-    Groups before = app.group().all(); //получаем множество элементов до модификации
+    Groups before = app.db().groups(); //получаем множество элементов до модификации
     GroupData modifiedGroup = before.iterator().next();
     GroupData group = new GroupData()
-            .withID(modifiedGroup.getId()).withName("test2").withHeader("test3").withFooter("test4"); //сохраняем старый идентификатор
+            .withID(modifiedGroup.getId()).withName("test1").withHeader("test2").withFooter("test3"); //сохраняем старый идентификатор
+    app.goTo().groupPage();
     app.group().modify(group);
 
     assertThat(app.group().count(), equalTo(before.size()));
-    Groups after = app.group().all(); //получаем множество элементов после модификации
+    Groups after = app.db().groups(); //получаем множество элементов после модификации
 
     assertThat(after, equalTo(before.withoutAdded(modifiedGroup).withAdded(group)));
 
