@@ -3,17 +3,32 @@ package ru.stqa.pft.addressbook.model;
 import com.google.gson.annotations.Expose;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import org.hibernate.annotations.Type;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @XStreamAlias("group")
+@Entity
+@Table(name = "group_list") //название таблицы
 
 public class GroupData {
   @Expose
+  @Column(name = "group_name") //название столбца в таблице
   private String name;
   @XStreamOmitField
+  @Id
+  @Column(name = "group_id") //название столбца в таблице
   private int id = Integer.MAX_VALUE;;  //модификатор final убрали, т.к. с ним мы не сгенерируем setter
   @Expose
+  @Column(name = "group_header") //название столбца в таблице
+  @Type(type = "text") //дополнительно указываем тип
   private String header;
   @Expose
+  @Column(name = "group_footer") //название столбца в таблице
+  @Type(type = "text") //дополнительно указываем тип
   private String footer;
 
 
