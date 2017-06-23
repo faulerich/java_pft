@@ -3,37 +3,69 @@ package ru.stqa.pft.addressbook.model;
 import com.google.gson.annotations.Expose;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
 import java.io.File;
 
+@Entity
+@Table(name="addressbook")
 @XStreamAlias("contact")
 
 public class ContactData {
   @XStreamOmitField
+  @Id
+  @Column(name="id")
   private int id = Integer.MAX_VALUE;  //модификатор final убрали, т.к. с ним мы не сгенерируем setter
   @Expose
+  @Column(name="firstname")
   private String firstname;
   @Expose
+  @Column(name="lastname")
   private String lastname;
+
+  @Expose
+  @Transient //означает, что пока не используется
+  private String group;
+
+  @Column(name="home")
+  @Type(type = "text")
   private String homephone;
+  @Column(name="work")
+  @Type(type = "text")
   private String workphone;
+  @Column(name="mobile")
+  @Type(type = "text")
   private String mobilephone;
+  @Transient //означает, что пока не используется
   private String firstemail;
+  @Transient //означает, что пока не используется
   private String secondemail;
+  @Transient //означает, что пока не используется
   private String thirdemail;
+  @Type(type = "text")
   private String email;
+
+  @Transient //означает, что пока не используется
   private String birthyear;
+
+  @Transient //означает, что пока не используется
   private String allPhones;
+  @Transient //означает, что пока не используется
   private String allEmails;
+  @Type(type = "text")
   private String address;
-  private File photo;
+
+  @Column(name="photo")
+  @Type(type = "text")
+  private String photo;
 
   public File getPhoto() {
-    return photo;
+    return new File(photo);
   }
 
   public ContactData withPhoto(File photo) {
-    this.photo = photo;
+    this.photo = photo.getPath();
     return this;
   }
 
@@ -75,8 +107,6 @@ public class ContactData {
     result = 31 * result + (lastname != null ? lastname.hashCode() : 0);
     return result;
   }
-  @Expose
-  private String group;
 
   public int getId() {
     return id;
@@ -201,5 +231,9 @@ public class ContactData {
 
   public String getFullAddress() {
     return address;
+  }
+
+  public void setGroup(String group) {
+    this.group = group;
   }
 }
