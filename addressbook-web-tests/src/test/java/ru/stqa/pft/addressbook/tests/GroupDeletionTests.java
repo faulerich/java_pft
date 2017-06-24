@@ -7,14 +7,13 @@ import ru.stqa.pft.addressbook.model.Groups;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.testng.Assert.assertEquals;
 
 public class GroupDeletionTests extends TestBase {
 
-  @BeforeMethod   //перед каждым тестовым методом должна выполняться проверка предусловия
+  @BeforeMethod
   public void ensurePreconditions() {  //проверяем предусловия: если список групп пуст, то создаем группу
-    app.goTo().groupPage();
-    if (app.group().list().size() == 0) {
+    if (app.db().groups().size() == 0) {
+      app.goTo().groupPage();
       app.group().create(new GroupData().withName("test1"));
     }
   }
@@ -22,14 +21,15 @@ public class GroupDeletionTests extends TestBase {
   @Test
   public void testGroupDeletion() {
 
-    Groups before = app.group().all(); //получаем множество элементов до операции добавления
+    Groups before = app.db().groups(); //получаем множество элементов до операции добавления
     //элемент из списка выбирается случайным образом
     //получим сначала итератор, который позволяет последовательно перебирать элементы, а потом вызвать next, который вернет первый попавшийся эл-т множества
     GroupData deletedGroup = before.iterator().next();
+    app.goTo().groupPage();
     app.group().delete(deletedGroup);
 
     assertThat(app.group().count(), equalTo(before.size() - 1));
-    Groups after = app.group().all(); //получаем множество элементов после операции добавления
+    Groups after = app.db().groups(); //получаем множество элементов после операции добавления
 
     //чтобы убедиться в том, что группа корректно удалилась, мы сравниваем множества целиком: до удаления и после удаления
     assertThat(after, equalTo(before.withoutAdded(deletedGroup)));

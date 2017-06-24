@@ -61,11 +61,11 @@ public class ContactCreationTests extends TestBase {
   public void contactGroupCreation(ContactData contact) {
 
     app.goTo().contactList();
-    Contacts before = app.contact().all(); //получаем множество элементов до операции добавления
+    Contacts before =  app.db().contacts(); //получаем множество элементов до операции добавления
 
     app.contact().create(contact, true);
     app.goTo().contactList();
-    Contacts after = app.contact().all(); //получаем множество элементов после операции добавления
+    Contacts after = app.db().contacts(); //получаем множество элементов после операции добавления
 
     assertEquals(after.size(), before.size() + 1); //сравниваем размеры множеств, которые получены методом all
 

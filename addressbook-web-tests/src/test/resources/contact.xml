@@ -3,10 +3,27 @@
     <firstname>firstname 0</firstname>
     <lastname>lastname 0</lastname>
     <group>[none]</group>
+    <homephone>111 0</homephone>
+    <email>test222@test222.com 0</email>
+    <birthyear>1985</birthyear>
+    <address>VRN 0</address>
   </contact>
   <contact>
     <firstname>firstname 1</firstname>
     <lastname>lastname 1</lastname>
     <group>[none]</group>
+    <homephone>111 1</homephone>
+    <email>test222@test222.com 1</email>
+    <birthyear>1985</birthyear>
+    <address>VRN 1</address>
+  </contact>
+  <contact>
+    <firstname>firstname 2</firstname>
+    <lastname>lastname 2</lastname>
+    <group>[none]</group>
+    <homephone>111 2</homephone>
+    <email>test222@test222.com 2</email>
+    <birthyear>1985</birthyear>
+    <address>VRN 2</address>
   </contact>
 </list>

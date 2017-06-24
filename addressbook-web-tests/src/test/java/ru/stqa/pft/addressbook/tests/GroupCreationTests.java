@@ -60,10 +60,10 @@ public class GroupCreationTests extends TestBase {
   @Test(dataProvider = "validGroupsfromXML")
   public void testGroupCreation(GroupData group) {
     app.goTo().groupPage();
-    Groups before = app.group().all(); //получаем множество элементов до операции добавления
+    Groups before = app.db().groups(); //получаем множество элементов до операции добавления
     app.group().create(group);
     assertEquals(app.group().count(), before.size() + 1); //сравниваем размеры множеств, которые получены методом all
-    Groups after = app.group().all(); //получаем множество элементов после операции добавления
+    Groups after = app.db().groups(); //получаем множество элементов после операции добавления
 
 
     // System.out.println(after.size());
