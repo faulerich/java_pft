@@ -36,5 +36,10 @@ public class GroupModificationTests extends TestBase {
 
     assertThat(after, equalTo(before.withoutAdded(modifiedGroup).withAdded(group)));
 
+    verifyGroupListInUI();
+
+
   }
+
+
 }
