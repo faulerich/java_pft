@@ -7,6 +7,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.Groups;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -57,11 +58,12 @@ public class ContactCreationTests extends TestBase {
     }
   }
 
-  @Test (dataProvider = "validContactsfromXML")
+  @Test(dataProvider = "validContactsfromXML")
   public void contactGroupCreation(ContactData contact) {
 
+    Groups groups = app.db().groups();
     app.goTo().contactList();
-    Contacts before =  app.db().contacts(); //получаем множество элементов до операции добавления
+    Contacts before = app.db().contacts(); //получаем множество элементов до операции добавления
 
     app.contact().create(contact, true);
     app.goTo().contactList();
@@ -96,7 +98,8 @@ public class ContactCreationTests extends TestBase {
 
     System.out.println(before.size());
     ContactData contact = new ContactData()
-            .withFirstName("Yevgeny").withLastName("Bondarenko'").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]");
+            //.withFirstName("Yevgeny").withLastName("Bondarenko'").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]");
+            .withFirstName("Yevgeny").withLastName("Bondarenko'").withHomephone("123").withEmail("test@test.com").withBirthyear("1985");
     app.contact().create(contact, true);
     app.goTo().contactList();
 

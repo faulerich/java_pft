@@ -16,7 +16,8 @@ public class ContactAddressTests extends TestBase {
   public void ensurePreconditions() {  //проверяем предусловия: если список контактов пуст, то создаем контакт
     app.goTo().contactList();
     if (app.contact().list().size() == 0) {
-      app.contact().create(new ContactData().withFirstName("Yevgeny").withLastName( "Bondarenko").withAddress("VRN").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]"), true);
+      //app.contact().create(new ContactData().withFirstName("Yevgeny").withLastName( "Bondarenko").withAddress("VRN").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]"), true);
+      app.contact().create(new ContactData().withFirstName("Yevgeny").withLastName( "Bondarenko").withAddress("VRN").withHomephone("123").withEmail("test@test.com").withBirthyear("1985"), true);
     }
   }
 

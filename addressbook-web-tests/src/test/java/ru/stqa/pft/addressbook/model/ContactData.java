@@ -7,6 +7,8 @@ import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="addressbook")
@@ -25,8 +27,6 @@ public class ContactData {
   private String lastname;
 
   @Expose
-  @Transient //означает, что пока не используется
-  private String group;
 
   @Column(name="home")
   @Type(type = "text")
@@ -60,6 +60,14 @@ public class ContactData {
 
   @Type(type = "text")
   private String photo;
+
+  //аннотация "многие-ко-многим" (группа может содержать много контактов и контакт может входить в много групп)
+  @ManyToMany  (fetch = FetchType.EAGER) //за одиин "заход" из БД извлекается как можно больше информации
+  //в качестве связующей таблицы используется "address_in_groups",
+  // joinColumns - объект, который указывает на столбец текущего класса (на контакты), т.е. столбец id
+  // inverseJoinColumns - объект, который указывает на столбец другого класса (на группы), т.е. столбец group_id
+  @JoinTable (name = "address_in_groups", joinColumns = @JoinColumn(name = "id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
+  private Set<GroupData> groups = new HashSet<GroupData>(); //инициализируем свойство (т.е. создаем пустое множество типа GroupData)
 
   public File getPhoto() {
     return new File(photo);
@@ -186,11 +194,6 @@ public class ContactData {
     return this;
   }
 
-  public ContactData withGroup(String group) {
-    this.group = group;
-    return this;
-  }
-
   public ContactData withAddress(String address) {
     this.address = address;
     return this;
@@ -236,15 +239,11 @@ public class ContactData {
     return birthyear;
   }
 
-  public String getGroup() {
-    return group;
-  }
-
   public String getFullAddress() {
     return address;
   }
 
-  public void setGroup(String group) {
-    this.group = group;
+  public Groups getGroups() {
+    return new Groups(groups);
   }
 }

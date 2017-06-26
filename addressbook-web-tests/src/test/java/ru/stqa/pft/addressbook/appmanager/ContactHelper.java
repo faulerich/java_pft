@@ -3,7 +3,6 @@ package ru.stqa.pft.addressbook.appmanager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
@@ -50,7 +49,9 @@ public class ContactHelper extends HelperBase {
     */
 
     if (creation) {
-      new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+      //if (contactData.getGroup() != null) {
+      //new Select(wd.findElement(By.name("new_group"))).selectByVisibleText(contactData.getGroup());
+      // }
     } else {
       Assert.assertFalse(isElementPresent(By.name("new_group")));
     }
@@ -173,34 +174,34 @@ public class ContactHelper extends HelperBase {
       String allPhones = cells.get(5).getText(); //получаем строку, состоящую из телефонов
       String allEmails = cells.get(4).getText(); //получаем строку, состоящую из email'ов
       contactCache.add(new ContactData().withID(id).withFirstName(firstname).withLastName(lastname).withAllPhones(allPhones).withAllEmails(allEmails)
-      .withAddress(address));
+              .withAddress(address));
     }
     return contactCache;
   }
 
-/*
-  //метод для получения множества контактов (лекции)
-  public Set<ContactData> all() {
+  /*
+    //метод для получения множества контактов (лекции)
+    public Set<ContactData> all() {
 
-    if (contactCache != null) {
-      return new Contacts(contactCache);
+      if (contactCache != null) {
+        return new Contacts(contactCache);
+      }
+
+      //contactCache = new Contacts();
+      Set<ContactData> contacts = new HashSet<ContactData>();
+      List<WebElement> rows = wd.findElements(By.name("entry"));
+      for (WebElement row : rows) { //переменная row пробегает по списку rows
+        List<WebElement> cells = row.findElements(By.name("td"));
+        int id = Integer.parseInt(cells.get(0).findElement(By.tagName("input")).getAttribute("value")); //ищем элемент внутри элемента
+        String lastname = cells.get(1).getText();
+        String firstname = cells.get(2).getText();
+        String[] phones = cells.get(5).getText().split("\n");
+        contacts.add(new ContactData().withID(id).withFirstName(firstname).withLastName(lastname).withHomephone(phones[0]).withMobilephone(phones[1]).withWorkphone(phones[2]));
+      }
+      return contactCache;
     }
 
-    //contactCache = new Contacts();
-    Set<ContactData> contacts = new HashSet<ContactData>();
-    List<WebElement> rows = wd.findElements(By.name("entry"));
-    for (WebElement row : rows) { //переменная row пробегает по списку rows
-      List<WebElement> cells = row.findElements(By.name("td"));
-      int id = Integer.parseInt(cells.get(0).findElement(By.tagName("input")).getAttribute("value")); //ищем элемент внутри элемента
-      String lastname = cells.get(1).getText();
-      String firstname = cells.get(2).getText();
-      String[] phones = cells.get(5).getText().split("\n");
-      contacts.add(new ContactData().withID(id).withFirstName(firstname).withLastName(lastname).withHomephone(phones[0]).withMobilephone(phones[1]).withWorkphone(phones[2]));
-    }
-    return contactCache;
-  }
-
-*/
+  */
   public ContactData infoFromEditForm(ContactData contact) {
     initContactModificationById(contact.getId());
     String firstname = wd.findElement(By.name("firstname")).getAttribute("value");
