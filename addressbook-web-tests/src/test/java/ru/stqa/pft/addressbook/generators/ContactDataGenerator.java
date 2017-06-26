@@ -46,10 +46,10 @@ public class ContactDataGenerator {
 
   private void run() throws IOException {
     List<ContactData> contacts = generateContacts(count);
-    if (format.equals("csv")) {
-      saveAsCsv(contacts, new File(file));
-    } else if (format.equals("xml")) {
+    if (format.equals("xml")) {
       saveAsXml(contacts, new File(file));
+    } else if (format.equals("csv")) {
+      saveAsCsv(contacts, new File(file));
     } else if (format.equals("json")) {
       saveAsJson(contacts, new File(file));
     } else {
@@ -84,7 +84,7 @@ public class ContactDataGenerator {
       //цикл записи в файл для всех групп
       for (ContactData contact : contacts) {
         //writer.write(String.format("%s;%s;%s\n", contact.getFirstname(), contact.getLastname(), contact.getGroup()));
-        writer.write(String.format("%s;%s;%s\n", contact.getFirstname(), contact.getLastname()));
+        writer.write(String.format("%s;%s\n", contact.getFirstname(), contact.getLastname()));
       }
     }
   }
