@@ -58,6 +58,11 @@ public class ContactCreationTests extends TestBase {
     }
   }
 
+  /*
+  здесь будет код выполнения предусловия (если нет ни одной группы, то она будет создана)
+   */
+
+
   @Test(dataProvider = "validContactsfromXML")
   public void contactGroupCreation(ContactData contact) {
 
@@ -67,9 +72,10 @@ public class ContactCreationTests extends TestBase {
 
     app.contact().create(contact, true);
     app.goTo().contactList();
-    Contacts after = app.db().contacts(); //получаем множество элементов после операции добавления
 
-    assertEquals(after.size(), before.size() + 1); //сравниваем размеры множеств, которые получены методом all
+    assertThat(app.contact().count(), equalTo(before.size() + 1));
+    //assertEquals(after.size(), before.size() + 1); //сравниваем размеры множеств, которые получены методом all
+    Contacts after = app.db().contacts(); //получаем множество элементов после операции добавления
 
     //используем библиотеку Hamcrest и сравниваем списки
     assertThat(after, equalTo

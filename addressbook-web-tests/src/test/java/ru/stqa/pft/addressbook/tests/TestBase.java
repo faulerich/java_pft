@@ -8,6 +8,8 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import ru.stqa.pft.addressbook.appmanager.ApplicationManager;
+import ru.stqa.pft.addressbook.model.ContactData;
+import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
 
@@ -43,7 +45,7 @@ public class TestBase {
     app.init();
   }
 
-  @AfterSuite (alwaysRun = true)
+  @AfterSuite(alwaysRun = true)
   public void tearDown() {
     app.stop();
   }
@@ -53,7 +55,7 @@ public class TestBase {
     logger.info("Start test " + m.getName() + " with parameters " + Arrays.asList(p));
   }
 
-  @AfterMethod (alwaysRun = true)
+  @AfterMethod(alwaysRun = true)
   public void logTestStop(Method m) {
     logger.info("Stop test " + m.getName());
   }
@@ -71,6 +73,24 @@ public class TestBase {
       //после того, как ко всем эл-там применена эта функиця, нужно все это собрать при пом. коллектора toSet
       assertThat(uiGroups, equalTo(dbGroups.stream()
               .map((g) -> new GroupData().withID(g.getId()).withName(g.getName()))
+              .collect(Collectors.toSet())));
+    }
+  }
+
+  public void verifyContactListInUI() {
+
+    //отключаемая проверка (загружать из БД или из интерфейса) (если системное св-во установлено, то выполнять описанные ниже действия)
+    if (Boolean.getBoolean("verifyUI")) {   //функция, получающая системное св-во (в конфигурациях файла в св-во VM добавить -DverifyUI=true)
+
+      Contacts dbContacts = app.db().contacts(); //список, загруженный из БД
+      Contacts uiContacts = app.contact().all(); //список, загруженный из интерфейса
+
+      //анонимная ф-ция, принимающая на вход контакт, а на выходе будет новый объект типа ContactData
+      // с именем таким же, как у преобразуемого объекта
+      //после того, как ко всем эл-там применена эта функиця, нужно все это собрать при пом. коллектора toSet
+      assertThat(uiContacts, equalTo(dbContacts.stream()
+              .map((g) -> new ContactData().withID(g.getId()).withFirstName(g.getFirstname()).withLastName(g.getLastname())
+                      .withHomephone(g.getHomephone()).withEmail(g.getEmail()).withAddress(g.getFullAddress()))
               .collect(Collectors.toSet())));
     }
   }
