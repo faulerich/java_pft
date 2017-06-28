@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,6 +76,14 @@ public class ContactHelper extends HelperBase {
 
   public void initContactModification(int index) {
     click(By.xpath("//a[@href='edit.php?id=" + index + "']"));
+  }
+
+  //фильтруем список контактов по группе
+  public void contactsFilterByGroup() {
+    wd.findElement(By.xpath("//select[@name='group']")).click();
+    wd.findElement(By.xpath("//option[@value='[none]']")).click();
+    //wd.findElement(By.xpath("//select[@name='group']//option[@value='[none]']")).click();
+    //click(By.cssSelector("input[name='add']"));
   }
 
 

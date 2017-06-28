@@ -3,14 +3,11 @@ package ru.stqa.pft.addressbook.appmanager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Bond on 21.05.2017.
@@ -66,6 +63,8 @@ public class GroupHelper extends HelperBase {
     groupCache = null;
     returnToGroupPage();
   }
+
+
 
   public boolean isThereAGroup() {
     return isElementPresent(By.name("selected[]"));
