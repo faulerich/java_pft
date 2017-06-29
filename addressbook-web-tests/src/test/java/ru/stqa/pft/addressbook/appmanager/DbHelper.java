@@ -56,6 +56,15 @@ public class DbHelper {
     return result;
   }
 
+  public GroupData getGroupFromDb(int id) {
+    Session session = sessionFactory.openSession();
+    session.beginTransaction();
+    GroupData result = (GroupData) session.createQuery("from GroupData where id=" + id).getSingleResult();
+    session.getTransaction().commit();
+    session.close();
+    return result;
+  }
+
   //выбираем группу с максимальным id из существующих
   public GroupData getGroupWithMaxIDFromDb() {
     Session session = sessionFactory.openSession();

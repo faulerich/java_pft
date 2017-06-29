@@ -7,6 +7,9 @@ import ru.stqa.pft.addressbook.model.Contacts;
 import ru.stqa.pft.addressbook.model.GroupData;
 import ru.stqa.pft.addressbook.model.Groups;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+
 /**
  * Created by Bond on 27.06.2017.
  */
@@ -33,17 +36,30 @@ public class AddContactToGroup extends TestBase {
   @Test
   public void testAddContactToGroup() {
 
+    GroupData foundSituatedGroup = null;
+    Contacts contactsBefore = null;
+
     app.goTo().contactList();
+
     Contacts beforeContacts = app.db().contacts();
-
     Groups group = app.db().groups();
+
     ContactData selectedContact = beforeContacts.iterator().next(); //контакт для препарирования
-    GroupData foundSituatedGroup = situatedGroup(group, selectedContact);
+    foundSituatedGroup = situatedGroup(group, selectedContact);
+    Groups before = app.db().getContactFromDb(selectedContact.getId()).getGroups(); //получаем из БД группы, в которые теперь входит выбранный контакт
 
-    Groups before = app.db().getContactFromDb(selectedContact.getId()).getGroups(); //получаем из БД группы, в которые входит выбранный контакт
+    //надо выбрать контакты, которые на этот момент находятся в группе foundSituatedGroup
+    if (foundSituatedGroup != null) {
+      contactsBefore = app.db().getGroupFromDb(foundSituatedGroup.getId()).getContacts();
 
-    System.out.println("выбран контакт с id " + selectedContact.getId());
-    System.out.println("выбранный контакт входит в группы " + before);
+
+      System.out.println("выбран контакт с id " + selectedContact.getId());
+      System.out.println("выбранный контакт входит в группы " + before);
+      System.out.println("выбранная группа с id = " + foundSituatedGroup.getId() + " содержит контакты: " + contactsBefore);
+    }
+    else {
+       contactsBefore = null;
+    }
 
     //добавим выделенный контакт в найденную подходящую группу (если таковая имеется, а если нет (т.е. контакт уже добавлен во все группы) - создадим новую)
     if (foundSituatedGroup == null) {
@@ -56,20 +72,22 @@ public class AddContactToGroup extends TestBase {
 
     app.contact().selectElementById(selectedContact.getId());
     app.contact().selectSituatedGroupFromList(foundSituatedGroup);
-    System.out.println("контакт добавлен в группу с id " + foundSituatedGroup.getId());
 
+    System.out.println("контакт добавлен в группу с id " + foundSituatedGroup.getId());
     Groups after = app.db().getContactFromDb(selectedContact.getId()).getGroups(); //получаем из БД группы, в которые теперь входит выбранный контакт
+
+    //надо выбрать контакты, которые на этот момент находятся в группе foundSituatedGroup
+    Contacts contactsAfter = app.db().getGroupFromDb(foundSituatedGroup.getId()).getContacts();
+
     System.out.println("выбран контакт с id " + selectedContact.getId());
     System.out.println("выбранный контакт входит в группы " + after);
 
+    System.out.println("контакты группы" + foundSituatedGroup.getId() + " до добавления контакта " + selectedContact.getId() + " : " + contactsBefore);
+    System.out.println("контакты группы" + foundSituatedGroup.getId() + " после добавления контакта " + selectedContact.getId() + " : " + contactsAfter);
+//    System.out.println(contactsBefore.withAdded(selectedContact));
 
 
-    /*
-    дальнейшие действия:
-
-1) реализовать проверку для добавления контакта
-    2) тест для удаления контакта из группы!
-     */
+      assertThat(contactsAfter, equalTo(contactsBefore.withAdded(selectedContact)));
 
 
   }

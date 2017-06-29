@@ -30,7 +30,7 @@ public class GroupData {
   @Type(type = "text") //дополнительно указываем тип
   private String footer;
 
-  @ManyToMany(mappedBy = "groups") // в парном классе (ContactData) надо найти атрибут groups и оттуда взять описание связей в БД
+  @ManyToMany(mappedBy = "groups", fetch = FetchType.EAGER)// в парном классе (ContactData) надо найти атрибут groups и оттуда взять описание связей в БД
   private Set<ContactData> contacts = new HashSet<ContactData>();
 
   public Contacts getContacts() {
