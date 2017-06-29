@@ -7,6 +7,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.pft.addressbook.model.ContactData;
 import ru.stqa.pft.addressbook.model.Contacts;
+import ru.stqa.pft.addressbook.model.GroupData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,10 +79,14 @@ public class ContactHelper extends HelperBase {
   }
 
   //выбор группы из списка для добавления в нее контакта
-  public void selectSituatedGroupFromList(int id) {
-    wd.findElement(By.xpath("//select[@name='to_group']")).click();
-    wd.findElement(By.xpath("//option[@value="+ id + "]")).click();
+  public void selectSituatedGroupFromList(GroupData group) {
+    //wd.findElement(By.xpath("//select[@name='to_group']")).click();
+    //wd.findElement(By.xpath("//option[@value='" + id + "']")).click();
+    new Select(wd.findElement(By.name("to_group"))).selectByValue(String.valueOf(group.getId()));
+    click(By.xpath("//div[@id='content']/form[2]/div[4]/input"));
   }
+
+  //new Select(wd.findElement(By.name("to_group"))).selectByVisibleText("test 2");
 
   //добавление контакта в выбранную из списка группу
   public void addContactToGroupButton() {

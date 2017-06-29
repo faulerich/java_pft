@@ -37,27 +37,34 @@ public class AddContactToGroup extends TestBase {
   public void testAddContactToGroup() {
 
     app.goTo().contactList();
-    //app.contact().contactsFilterByGroup();
     Contacts beforeContacts = app.db().contacts();
-    Groups before = app.db().groups(); //получаем из БД множество элементов до добавления контакта в группу
+
     Groups group = app.db().groups();
     ContactData selectedContact = beforeContacts.iterator().next(); //контакт для препарирования
     GroupData foundSituatedGroup = situatedGroup(group, selectedContact);
+
+
+    Groups before = app.db().getContactFromDb(selectedContact.getId()).getGroups(); //получаем из БД группы, в которые входит выбранный контакт
+
+    System.out.println("выбран контакт с id " + selectedContact.getId());
+    System.out.println("выбранный контакт входит в группы " + before);
+
+    //добавим выделенный контакт в найденную подходящую группу (если таковая имеется, а если нет (т.е. контакт уже добавлен во все группы) - создадим новую)
     app.contact().selectElementById(selectedContact.getId());
+    app.contact().selectSituatedGroupFromList(foundSituatedGroup);
+    System.out.println("контакт добавлен в группу с id " + foundSituatedGroup.getId());
 
-    //добавим выделенный контакт в найденную подходящую группу
-    app.contact().selectSituatedGroupFromList(foundSituatedGroup.getId());
-    app.contact().addContactToGroupButton();
-
-    ContactData after = app.db().getContactFromDb(1); //получаем из БД множество элементов после добавления контакта в группу
+    Groups after = app.db().getContactFromDb(selectedContact.getId()).getGroups(); //получаем из БД группы, в которые теперь входит выбранный контакт
+    System.out.println("выбран контакт с id " + selectedContact.getId());
+    System.out.println("выбранный контакт входит в группы " + after);
 
 
 
     /*
     дальнейшие действия:
-    1) найти before и after
-    2) определить, что будет если situatedGroup не найдена
-    3) удаление контакта из группы
+
+    1) !!! определить, что будет если situatedGroup не найдена
+    2) удаление контакта из группы
      */
 
 
@@ -68,7 +75,7 @@ public class AddContactToGroup extends TestBase {
     Groups situatedGroups = contact.getGroups(); //получили все группы, в которые входит переданный в метод контакт
     for (GroupData group : groups) {
       if (situatedGroups.contains(group)) {
-        return null;
+        continue;
       } else {   //если среди групп контакта нет очередной взятой из общего списка групп, то эта группа - наш клиент
         return group;
       }

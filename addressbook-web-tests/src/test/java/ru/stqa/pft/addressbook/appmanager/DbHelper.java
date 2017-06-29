@@ -56,4 +56,13 @@ public class DbHelper {
     return result;
   }
 
+  public Groups getGroupsOfContactFromDb(int id){
+    Session session = sessionFactory.openSession();
+    session.beginTransaction();
+    List<GroupData> result = session.createQuery( "from ContactData where group_id=" + id ).list();
+    session.getTransaction().commit();
+    session.close();
+    return new Groups(result);
+  }
+
 }
