@@ -26,14 +26,11 @@ public class AddContactToGroup extends TestBase {
       app.goTo().contactList();
       app.contact().create(new ContactData()
               //.withFirstName("Yevgeny").withLastName("Bondarenko").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withGroup("[none]").withAddress("qqq"), true);
-              .withFirstName("Yevgeny").withLastName("Bondarenko").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withAddress("qqq"), true)
-      ;
-
+              .withFirstName("Yevgeny").withLastName("Bondarenko").withHomephone("123").withEmail("test@test.com").withBirthyear("1985").withAddress("qqq"), true);
     }
   }
 
   @Test
-
   public void testAddContactToGroup() {
 
     app.goTo().contactList();
@@ -43,13 +40,20 @@ public class AddContactToGroup extends TestBase {
     ContactData selectedContact = beforeContacts.iterator().next(); //контакт для препарирования
     GroupData foundSituatedGroup = situatedGroup(group, selectedContact);
 
-
     Groups before = app.db().getContactFromDb(selectedContact.getId()).getGroups(); //получаем из БД группы, в которые входит выбранный контакт
 
     System.out.println("выбран контакт с id " + selectedContact.getId());
     System.out.println("выбранный контакт входит в группы " + before);
 
     //добавим выделенный контакт в найденную подходящую группу (если таковая имеется, а если нет (т.е. контакт уже добавлен во все группы) - создадим новую)
+    if (foundSituatedGroup == null) {
+      app.goTo().groupPage();
+      app.group().create(new GroupData().withName("test_new"));
+      //добавлена новая группа, найдем ее по максимальному id среди всех групп
+      foundSituatedGroup = app.db().getGroupWithMaxIDFromDb();
+      app.goTo().contactList();
+    }
+
     app.contact().selectElementById(selectedContact.getId());
     app.contact().selectSituatedGroupFromList(foundSituatedGroup);
     System.out.println("контакт добавлен в группу с id " + foundSituatedGroup.getId());
@@ -63,8 +67,8 @@ public class AddContactToGroup extends TestBase {
     /*
     дальнейшие действия:
 
-    1) !!! определить, что будет если situatedGroup не найдена
-    2) удаление контакта из группы
+1) реализовать проверку для добавления контакта
+    2) тест для удаления контакта из группы!
      */
 
 
