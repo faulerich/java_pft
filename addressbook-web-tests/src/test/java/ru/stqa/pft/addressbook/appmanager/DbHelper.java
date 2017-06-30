@@ -98,4 +98,16 @@ public class DbHelper {
     return null;
   }
 
+  // получим подходящую группу для удаления из нее контакта (т.е. такую, у которой есть контакт(ы))
+
+  public GroupData situatedGroupForRemoveContact() {
+    Groups groups = groups();
+    for (GroupData group : groups) {
+      if (group.getContacts().size() > 0) {
+        return group;
+      }
+    }
+    return null;
+  }
+
 }

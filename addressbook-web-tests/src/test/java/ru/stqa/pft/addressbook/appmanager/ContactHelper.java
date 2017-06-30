@@ -93,10 +93,15 @@ public class ContactHelper extends HelperBase {
     click(By.name("add"));
   }
 
+  //удаление контакта из выбранной из списка группы
+  public void deleteContactFromGroupButton() {
+    click(By.name("remove"));
+  }
+
   //фильтруем список контактов по группе
-  public void contactsFilterByGroup() {
+  public void contactsFilterByGroup(int id) {
     wd.findElement(By.xpath("//select[@name='group']")).click();
-    wd.findElement(By.xpath("//option[@value='[none]']")).click();
+    wd.findElement(By.xpath("//option[@value='" + id + "']")).click();
     //wd.findElement(By.xpath("//select[@name='group']//option[@value='[none]']")).click();
     //click(By.cssSelector("input[name='add']"));
   }
