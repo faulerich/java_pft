@@ -45,21 +45,7 @@ public class AddContactToGroup extends TestBase {
     Groups group = app.db().groups();
 
     ContactData selectedContact = beforeContacts.iterator().next(); //контакт для препарирования
-    foundSituatedGroup = situatedGroup(group, selectedContact);
-    Groups before = app.db().getContactFromDb(selectedContact.getId()).getGroups(); //получаем из БД группы, в которые теперь входит выбранный контакт
-
-    //надо выбрать контакты, которые на этот момент находятся в группе foundSituatedGroup
-    if (foundSituatedGroup != null) {
-      contactsBefore = app.db().getGroupFromDb(foundSituatedGroup.getId()).getContacts();
-
-
-      System.out.println("выбран контакт с id " + selectedContact.getId());
-      System.out.println("выбранный контакт входит в группы " + before);
-      System.out.println("выбранная группа с id = " + foundSituatedGroup.getId() + " содержит контакты: " + contactsBefore);
-    }
-    else {
-       contactsBefore = null;
-    }
+    foundSituatedGroup = app.db().situatedGroup(group, selectedContact);
 
     //добавим выделенный контакт в найденную подходящую группу (если таковая имеется, а если нет (т.е. контакт уже добавлен во все группы) - создадим новую)
     if (foundSituatedGroup == null) {
@@ -67,43 +53,19 @@ public class AddContactToGroup extends TestBase {
       app.group().create(new GroupData().withName("test_new"));
       //добавлена новая группа, найдем ее по максимальному id среди всех групп
       foundSituatedGroup = app.db().getGroupWithMaxIDFromDb();
+      contactsBefore = app.db().getGroupFromDb(foundSituatedGroup.getId()).getContacts();
       app.goTo().contactList();
+    } else {
+      contactsBefore = app.db().getGroupFromDb(foundSituatedGroup.getId()).getContacts();
     }
 
     app.contact().selectElementById(selectedContact.getId());
     app.contact().selectSituatedGroupFromList(foundSituatedGroup);
 
-    System.out.println("контакт добавлен в группу с id " + foundSituatedGroup.getId());
-    Groups after = app.db().getContactFromDb(selectedContact.getId()).getGroups(); //получаем из БД группы, в которые теперь входит выбранный контакт
-
     //надо выбрать контакты, которые на этот момент находятся в группе foundSituatedGroup
     Contacts contactsAfter = app.db().getGroupFromDb(foundSituatedGroup.getId()).getContacts();
 
-    System.out.println("выбран контакт с id " + selectedContact.getId());
-    System.out.println("выбранный контакт входит в группы " + after);
-
-    System.out.println("контакты группы" + foundSituatedGroup.getId() + " до добавления контакта " + selectedContact.getId() + " : " + contactsBefore);
-    System.out.println("контакты группы" + foundSituatedGroup.getId() + " после добавления контакта " + selectedContact.getId() + " : " + contactsAfter);
-//    System.out.println(contactsBefore.withAdded(selectedContact));
-
-
-      assertThat(contactsAfter, equalTo(contactsBefore.withAdded(selectedContact)));
-
-
+    assertThat(contactsAfter, equalTo(contactsBefore.withAdded(selectedContact)));
   }
-// получим подходящую для добавления группу
-
-  public GroupData situatedGroup(Groups groups, ContactData contact) {
-    Groups situatedGroups = contact.getGroups(); //получили все группы, в которые входит переданный в метод контакт
-    for (GroupData group : groups) {
-      if (situatedGroups.contains(group)) {
-        continue;
-      } else {   //если среди групп контакта нет очередной взятой из общего списка групп, то эта группа - наш клиент
-        return group;
-      }
-    }
-    return null;
-  }
-
 
 }

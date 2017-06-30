@@ -84,4 +84,18 @@ public class DbHelper {
     return new Groups(result);
   }
 
+  // получим подходящую для добавления группу
+
+  public GroupData situatedGroup(Groups groups, ContactData contact) {
+    Groups situatedGroups = contact.getGroups(); //получили все группы, в которые входит переданный в метод контакт
+    for (GroupData group : groups) {
+      if (situatedGroups.contains(group)) {
+        continue;
+      } else {   //если среди групп контакта нет очередной взятой из общего списка групп, то эта группа - наш клиент
+        return group;
+      }
+    }
+    return null;
+  }
+
 }
