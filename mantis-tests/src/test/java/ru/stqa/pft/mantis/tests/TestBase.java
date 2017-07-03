@@ -29,7 +29,7 @@ public class TestBase {
   }
 
   @AfterSuite(alwaysRun = true)
-  public void tearDown() {
+  public void tearDown() throws IOException {
     app.stop();
   }
 
