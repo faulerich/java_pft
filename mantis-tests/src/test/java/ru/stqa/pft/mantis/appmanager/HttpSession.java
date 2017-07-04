@@ -41,14 +41,14 @@ public class HttpSession {
     //упаковываем параметры и помещаем в созданный запрос
     post.setEntity(new UrlEncodedFormEntity(params));
     CloseableHttpResponse response = httpclient.execute(post); //отправка запроса
-    String body = geTextFrom(response); //получаем текст ответа (html-текст)
+    String body = getTextFrom(response); //получаем текст ответа (html-текст)
 
     //проверяем, действительно ли пользователь успешно вошел
     //признак этого - код страницы содержит строку <span class="user-info">%s</span>
-    return body.contains(String.format("<span class=\"user-info\">%s</span>", username));
+    return body.contains(String.format("<span class=\"italic\">%s</span>", username));
   }
 
-  private String geTextFrom(CloseableHttpResponse response) throws IOException {
+  private String getTextFrom(CloseableHttpResponse response) throws IOException {
     try {
       return EntityUtils.toString(response.getEntity());
     } finally {
@@ -60,8 +60,8 @@ public class HttpSession {
   public boolean isLoggedInAs(String username) throws IOException {
     HttpGet get = new HttpGet(app.getProperty("web.baseUrl") + "/index.php"); //отправка get-запроса (параметры не передаются)
     CloseableHttpResponse response = httpclient.execute(get);
-    String body = geTextFrom(response);
-    return body.contains(String.format("<span class=\"user-info\">%s</span>", username));
+    String body = getTextFrom(response);
+    return body.contains(String.format("<span class=\"italic\">%s</span>", username));
   }
 
 }
