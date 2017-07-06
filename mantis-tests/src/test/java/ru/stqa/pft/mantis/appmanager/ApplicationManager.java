@@ -29,6 +29,8 @@ public class ApplicationManager {
   private FtpHelper ftp;
   private MailHelper mailHelper;
   private JamesHelper jamesHelper;
+  private DbHelper db;
+  private UserHelper userHelper;
 
 
   public ApplicationManager(String browser) throws IOException {
@@ -90,6 +92,14 @@ public class ApplicationManager {
       wd.get(properties.getProperty("web.baseUrl"));
     }
     return wd;
+  }
+
+  public UserHelper user() {
+    return userHelper;
+  }
+
+  public DbHelper db() {
+    return db;
   }
 
   public MailHelper mail() {
