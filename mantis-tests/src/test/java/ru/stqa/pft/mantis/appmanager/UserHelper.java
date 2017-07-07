@@ -1,8 +1,10 @@
 package ru.stqa.pft.mantis.appmanager;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import ru.stqa.pft.mantis.tests.TestBase;
+import ru.lanwen.verbalregex.VerbalExpression;
+import ru.stqa.pft.mantis.model.MailMessage;
+
+import java.util.List;
 
 /**
  * Created by Bond on 04.07.2017.
@@ -52,5 +54,27 @@ public class UserHelper extends HelperBase {
     type(By.name("username"), login);
     type(By.name("password"), password);
     click(By.xpath("//input[@value='Login']"));
+  }
+
+  public void adminLogin() {
+    type(By.name("username"), "administrator");
+    type(By.name("password"), "root");
+    click(By.xpath("//input[@value='Login']"));
+  }
+
+  public String generatedPassword() {
+    int randomValue = (int) (Math.random() * 100000);
+    return Integer.toString(randomValue);
+  }
+
+  //логаут
+  public void logout() {
+    click(By.xpath("//a[text() = 'Logout']"));
+  }
+
+  public String findConfirmationLink(List<MailMessage> mailMessages, String email) {
+    MailMessage mailMessage = mailMessages.stream().filter((m) -> m.to.equals(email)).findFirst().get();
+    VerbalExpression regex = VerbalExpression.regex().find("http://").nonSpace().oneOrMore().build();
+    return regex.getText(mailMessage.text);
   }
 }
