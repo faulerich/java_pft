@@ -66,6 +66,13 @@ public class ApplicationManager {
     return registrationHelper;
   }
 
+  public UserHelper user() {
+    if (userHelper == null) {
+      userHelper = new UserHelper(this);
+    }
+    return userHelper;
+  }
+
   public FtpHelper ftp() {
     if (ftp == null) {
       ftp = new FtpHelper(this);
@@ -94,11 +101,10 @@ public class ApplicationManager {
     return wd;
   }
 
-  public UserHelper user() {
-    return userHelper;
-  }
-
   public DbHelper db() {
+    if (db == null) {
+      db = new DbHelper(this);
+    }
     return db;
   }
 

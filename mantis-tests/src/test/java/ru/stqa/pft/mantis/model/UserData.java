@@ -1,10 +1,11 @@
 package ru.stqa.pft.mantis.model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-
+@Entity
 @Table(name = "mantis_user_table") //название таблицы
 
 public class UserData {
@@ -56,11 +57,11 @@ public class UserData {
 
   @Override
   public String toString() {
-    return "GroupData{" +
-            "id='" + id + '\'' +
-            "name='" + username + '\'' +
-            "header='" + email + '\'' +
-            "footer='" + password + '\'' +
+    return "UserData{" +
+            "username='" + username + '\'' +
+            ", id=" + id +
+            ", email='" + email + '\'' +
+            ", password='" + password + '\'' +
             '}';
   }
 
