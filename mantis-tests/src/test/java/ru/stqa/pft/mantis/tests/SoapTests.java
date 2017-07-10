@@ -18,6 +18,7 @@ public class SoapTests extends TestBase{
 
   @Test (enabled = false) //обращение к багтрекеру через удаленный программный интерфейс (Remote API) и получение информации
   public void testGetProjects() throws MalformedURLException, ServiceException, RemoteException {
+
     Set<Project> projects = app.soap().getProjects();
     System.out.println("Проектов: " + projects.size());
     for (Project project : projects) {
@@ -36,7 +37,8 @@ public class SoapTests extends TestBase{
 
   @Test
   public void test_bug0000003() throws RemoteException, ServiceException, MalformedURLException {
+    //System.out.println("Статус тикета 0000003: " + app.soap().issueStatus(3));
     skipIfNotFixed(3);
-    System.out.println("Статус тикета 0000003: " + app.soap().issueStatus(3));
+    System.out.println("Some Test Steps...");
   }
 }
