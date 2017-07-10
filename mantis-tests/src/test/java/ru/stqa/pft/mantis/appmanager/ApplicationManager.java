@@ -31,6 +31,7 @@ public class ApplicationManager {
   private JamesHelper jamesHelper;
   private DbHelper db;
   private UserHelper userHelper;
+  private SoapHelper soapHelper;
 
 
   public ApplicationManager(String browser) throws IOException {
@@ -120,5 +121,12 @@ public class ApplicationManager {
       jamesHelper = new JamesHelper(this);
     }
     return jamesHelper;
+  }
+
+  public SoapHelper soap() {
+    if (soapHelper == null) {
+      soapHelper = new SoapHelper(this);
+    }
+    return soapHelper;
   }
 }
