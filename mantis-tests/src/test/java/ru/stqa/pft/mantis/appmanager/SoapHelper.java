@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static org.testng.reporters.XMLReporterConfig.getStatus;
+
 /**
  * Created by Bond on 09.07.2017.
  */
@@ -58,5 +60,13 @@ public class SoapHelper {
             .withSummary(createdIssueData.getSummary()).withDescription(createdIssueData.getDescription())
             .withProject(new Project().withId(createdIssueData.getId().intValue())
                                       .withName(createdIssueData.getProject().getName()));
+  }
+
+  public String issueStatus(int id) throws MalformedURLException, ServiceException, RemoteException {
+    //открываем соединение
+    MantisConnectPortType mc = getMantisConnect();
+    //узнаем статус тикета
+    Object status = mc.mc_issue_get("administrator", "root", BigInteger.valueOf(id)).getStatus().getName();
+    return (String) status;
   }
 }
