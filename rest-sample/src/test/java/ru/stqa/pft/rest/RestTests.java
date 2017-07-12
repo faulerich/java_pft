@@ -11,6 +11,8 @@ import org.apache.http.message.BasicNameValuePair;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.rmi.RemoteException;
 import java.util.Set;
 
 import static org.testng.Assert.assertEquals;
@@ -18,13 +20,13 @@ import static org.testng.Assert.assertEquals;
 /**
  * Created by Bond on 11.07.2017.
  */
-public class RestTests {
+public class RestTests extends TestBase {
 
-  @Test  //создание баг-репорта в баг-трекере Bugify
+  @Test (enabled = true) //создание баг-репорта в баг-трекере Bugify
   public void testCreateIssue() throws IOException {
 
     Set<Issue> oldIssues = getIssues();
-    Issue newIssue = new Issue().withSubject("Test issue").withDescription("Test issue description");
+    Issue newIssue = new Issue().withSubject("Test issue").withDescription("Test issue description").withState_name("Open");
     int issueId = createIssue(newIssue);
     Set<Issue> newIssues = getIssues();
     oldIssues.add(newIssue.withId(issueId));
@@ -41,7 +43,7 @@ public class RestTests {
     //получаем json-элемент
     JsonElement parsed = new JsonParser().parse(json);
 
-    //извлекаем из него по клюючу нужную часть
+    //извлекаем из него по ключу нужную часть
     JsonElement issues = parsed.getAsJsonObject().get("issues");
 
     //преобразуем полученный элемент в множество объектов типа Issue
@@ -49,19 +51,21 @@ public class RestTests {
     }.getType());
   }
 
-  private Executor getExecutor() {
-    //авторизуемся на сервере api
-    return Executor.newInstance().auth("LSGjeU4yP1X493ud1hNniA==", "");
-  }
-
   private int createIssue(Issue newIssue) throws IOException { //для создания тикета отправляем POST-запрос с параметрами
     String json = getExecutor().execute(Request.Post("http://demo.bugify.com/api/issues.json")
             .bodyForm(new BasicNameValuePair("subject", newIssue.getSubject()),
-                    new BasicNameValuePair("description", newIssue.getDescription())))
+                    new BasicNameValuePair("description", newIssue.getDescription()),
+                    new BasicNameValuePair("state_name", newIssue.getState_name())))
             .returnContent().asString();
     //получаем json-элемент (анализируем строку)
     JsonElement parsed = new JsonParser().parse(json);
     //берем значение по ключу (см. ответ в интерфейсе API) Это будет ID созданного баг-репорта
     return parsed.getAsJsonObject().get("issue_id").getAsInt();
+  }
+
+  @Test
+  public void test_SampleIssue7 () throws IOException {
+    skipIfNotFixed(7);
+    System.out.println("Some Test Steps...");
   }
 }

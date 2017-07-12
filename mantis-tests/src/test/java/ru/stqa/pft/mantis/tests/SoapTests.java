@@ -16,7 +16,7 @@ import static org.testng.Assert.assertEquals;
  */
 public class SoapTests extends TestBase{
 
-  @Test (enabled = false) //обращение к багтрекеру через удаленный программный интерфейс (Remote API) и получение информации
+  @Test //обращение к багтрекеру через удаленный программный интерфейс (Remote API) и получение информации
   public void testGetProjects() throws MalformedURLException, ServiceException, RemoteException {
 
     Set<Project> projects = app.soap().getProjects();
@@ -26,7 +26,7 @@ public class SoapTests extends TestBase{
     }
   }
 
-  @Test (enabled = false) //создаем баг-репорт в мантис
+  @Test  //создаем баг-репорт в мантис
   public void teetCreateIssue() throws RemoteException, ServiceException, MalformedURLException {
     Set<Project> projects = app.soap().getProjects();
     Issue issue = new Issue().withSummary("Test issue")
