@@ -71,7 +71,8 @@ public class ContactHelper extends HelperBase {
   }
 
   public void selectElementById(int id) {
-    wd.findElement(By.cssSelector("input[value='" + id + "']")).click();
+    //wd.findElement(By.cssSelector("input[value='" + id + "']")).click();
+    wd.findElement(By.cssSelector("input[id='" + id + "']")).click();
   }
 
   public void initContactModification(int index) {
