@@ -18,6 +18,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import static java.lang.System.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -34,7 +35,7 @@ public class TestBase {
 
   static {
     try {
-      app = new ApplicationManager(System.getProperty("browser", BrowserType.CHROME));
+      app = new ApplicationManager(getProperty("browser", BrowserType.CHROME));
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -45,7 +46,7 @@ public class TestBase {
     app.init();
   }
 
-  @AfterSuite(alwaysRun = true)
+  @AfterSuite
   public void tearDown() {
     app.stop();
   }
