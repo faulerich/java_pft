@@ -62,3 +62,8 @@ task testGroups(type: Test) {
 
     }
 }
+
+
+test {
+    useTestNG()
+}
