@@ -59,12 +59,13 @@ public class ApplicationManager {
                         true
                 );
                 wd = new InternetExplorerDriver(ieCapabilities);
-            } else //если свойство selenium server - непустая строка (используется selenium server), то используем другой тип драйвера
-            {
-                DesiredCapabilities capabilities = new DesiredCapabilities();
-                capabilities.setBrowserName(browser);
-                wd = new RemoteWebDriver(new URL(properties.getProperty("selenium.server")), capabilities);
             }
+        }
+        else //если свойство selenium server - непустая строка (используется selenium server), то используем другой тип драйвера
+        {
+            DesiredCapabilities capabilities = new DesiredCapabilities();
+            capabilities.setBrowserName(browser);
+            wd = new RemoteWebDriver(new URL(properties.getProperty("selenium.server")), capabilities);
         }
 
         wd.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
